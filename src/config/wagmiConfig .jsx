@@ -3,6 +3,9 @@ import { monadTestnet } from "wagmi/chains";
 import { walletConnect } from "wagmi/connectors";
 
 const projectId = process.env.VITE_WALLETCONNECT_ID;
+const projectUrl = process.env.VITE_WALLETCONNECT_PROJECTURL;
+const projectIcon = process.env.VITE_WALLETCONNECT_PROJECTICON;
+
 
 // Create wagmi config
 const wagmiConfig = createConfig({
@@ -15,8 +18,8 @@ const wagmiConfig = createConfig({
       projectId: projectId,
       metadata: {
         name: "Penny Wager",
-        url: "https://your-website.com",
-        icons: ["https://your-website.com/icon.png"],
+        url: projectUrl,
+        icons: projectIcon,
       },
     }),
   ],
