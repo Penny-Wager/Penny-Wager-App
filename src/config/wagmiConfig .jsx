@@ -2,9 +2,9 @@ import { http, createConfig } from "wagmi";
 import { monadTestnet } from "wagmi/chains";
 import { walletConnect } from "wagmi/connectors";
 
-const projectId = process.env.VITE_WALLETCONNECT_ID;
-const projectUrl = process.env.VITE_WALLETCONNECT_PROJECTURL;
-const projectIcon = process.env.VITE_WALLETCONNECT_PROJECTICON;
+const projectId = import.meta.env.VITE_WALLETCONNECT_ID;
+const projectUrl = import.meta.env.VITE_WALLETCONNECT_PROJECTURL;
+const projectIcon = import.meta.env.VITE_WALLETCONNECT_PROJECTICON;
 
 
 // Create wagmi config
