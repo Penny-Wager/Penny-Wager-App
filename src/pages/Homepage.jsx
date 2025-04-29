@@ -1,212 +1,129 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
-  FaBitcoin,
-  FaDice,
   FaFire,
-  FaTrophy,
   FaChevronLeft,
   FaChevronRight,
+  FaStar,
+  FaFilter,
 } from "react-icons/fa";
-import { RiCoinLine } from "react-icons/ri";
-import { TbCards } from "react-icons/tb";
-import { useWeb3 } from "../context/Web3Context";
-import spinWheel from "../assets/spin_wheel.png";
+import CoinFlipImage from "../assets/game-images/flip-coin.png";
 
 export default function Homepage() {
-  const { account, connectWallet, isConnecting } = useWeb3();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("all");
+  const [filteredGames, setFilteredGames] = useState([]);
+  const [showFilters, setShowFilters] = useState(false);
 
-  const hotGames = [
+  const games = [
     {
-      id: "zeus",
-      name: "ZEUS",
-      subtitle: "THE THUNDERER",
-      image: "/game-images/zeus.webp",
-      provider: "Pragmatic",
+      id: "coin-flip",
+      name: "Coin Flip",
+      description: "50/50 chance to double your bet",
+      category: "casino",
+      image: CoinFlipImage,
+      releaseDate: "2025-04-01",
+      featured: true,
+      popular: true,
     },
     {
-      id: "wild-phoenix",
-      name: "WILD PHOENIX",
-      subtitle: "GOLD",
-      image: "/game-images/phoenix.webp",
-      provider: "BGT",
+      id: "dice-roll",
+      name: "Dice Roll",
+      description: "Roll the dice and win big",
+      category: "casino",
+      image: "/game-images/dice-roll.webp",
+      releaseDate: "2025-03-15",
+      featured: false,
+      popular: true,
     },
     {
-      id: "hello-win",
-      name: "HELLO WIN",
-      subtitle: "",
-      image: "/game-images/hello-win.webp",
-      provider: "Pragmatic",
+      id: "card-pick",
+      name: "Card Pick",
+      description: "Pick a card and test your luck",
+      category: "slot-games",
+      image: "/game-images/3-card-pick.webp",
+      releaseDate: "2025-09-20",
+      featured: true,
+      popular: false,
     },
     {
-      id: "gates-of-olympus",
-      name: "GATES OF OLYMPUS",
-      subtitle: "",
-      image: "/game-images/olympus.webp",
-      provider: "Pragmatic",
-    },
-    {
-      id: "starlight-christmas",
-      name: "STARLIGHT CHRISTMAS",
-      subtitle: "",
-      image: "/game-images/christmas.webp",
-      provider: "Pragmatic",
-    },
-    {
-      id: "big-bass-bonanza",
-      name: "BIG BASS BONANZA",
-      subtitle: "MEGAWAYS",
-      image: "/game-images/bass.webp",
-      provider: "Pragmatic",
+      id: "lucky-number",
+      name: "Lucky Number",
+      description: "Pick your lucky number and win",
+      category: "slot-games",
+      image: "/game-images/lucky-number.jpg",
+      releaseDate: "2025-05-10",
+      featured: false,
+      popular: true,
     },
   ];
+
+  useEffect(() => {
+    // Filter games based on active tab
+    if (activeTab === "all") {
+      setFilteredGames(games);
+    } else {
+      setFilteredGames(games.filter((game) => game.category === activeTab));
+    }
+  }, [activeTab]);
+
+  // Get featured games
+  const featuredGames = games.filter((game) => game.featured);
+
+  // Get popular games
+  const popularGames = games.filter((game) => game.popular);
 
   return (
     <div className="bg-black text-gray-300 min-h-screen pb-8">
       {/* Main Content */}
-      <div className="container mx-auto px-4 mt-8">
-        {/* Game Categories */}
-        <div className="grid grid-cols-2 gap-4 mb-8">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 relative overflow-hidden shadow-lg hover:border-indigo-600 transition-colors duration-300">
-            <div className="z-10 relative">
-              <h3 className="text-xl font-bold text-white mb-1">Casino</h3>
-              <p className="text-sm text-gray-400 mb-4">
-                Unveil the World of Thrilling games, slots and jackpots!
-              </p>
-              <button className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm py-1 px-4 rounded transition-colors duration-200">
-                Free Spin
-              </button>
-            </div>
-            <div className="absolute -right-10 top-0 opacity-70">
-              <img
-                src={spinWheel}
-                alt="Spin wheel"
-                className="h-42 object-cover"
-              />
-            </div>
-          </div>
-
-          <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 relative overflow-hidden shadow-lg hover:border-indigo-600 transition-colors duration-300">
-            <div className="z-10 relative">
-              <h3 className="text-xl font-bold text-white mb-1">Sport</h3>
-              <p className="text-sm text-gray-400 mb-4">
-                Best Odds, Live Statistics, and VIP Perks!
-              </p>
-              <button className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm py-1 px-4 rounded transition-colors duration-200">
-                Free To Play
-              </button>
-            </div>
-            <div className="absolute right-0 bottom-0 opacity-70">
-              <img
-                src="/api/placeholder/150/150"
-                alt="Trophy"
-                className="h-24"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Game Filters */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex space-x-1">
-            <button
-              className={`px-6 py-2 rounded-lg text-sm font-medium ${
-                activeTab === "all"
-                  ? "bg-indigo-600 text-white"
-                  : "bg-zinc-900 text-gray-300 hover:bg-zinc-800"
-              } transition-colors duration-200`}
-              onClick={() => setActiveTab("all")}
-            >
-              All
-            </button>
-            <button
-              className={`px-6 py-2 rounded-lg text-sm font-medium ${
-                activeTab === "lobby"
-                  ? "bg-indigo-600 text-white"
-                  : "bg-zinc-900 text-gray-300 hover:bg-zinc-800"
-              } transition-colors duration-200`}
-              onClick={() => setActiveTab("lobby")}
-            >
-              Lobby
-            </button>
-            <button
-              className={`px-6 py-2 rounded-lg text-sm font-medium ${
-                activeTab === "live"
-                  ? "bg-indigo-600 text-white"
-                  : "bg-zinc-900 text-gray-300 hover:bg-zinc-800"
-              } transition-colors duration-200`}
-              onClick={() => setActiveTab("live")}
-            >
-              Live Casino
-            </button>
-            <button
-              className={`px-6 py-2 rounded-lg text-sm font-medium ${
-                activeTab === "slots"
-                  ? "bg-indigo-600 text-white"
-                  : "bg-zinc-900 text-gray-300 hover:bg-zinc-800"
-              } transition-colors duration-200`}
-              onClick={() => setActiveTab("slots")}
-            >
-              Slot Games
-            </button>
-          </div>
-
-          <div className="flex items-center">
-            <span className="text-sm mr-2">Sort by:</span>
-            <select className="bg-zinc-900 text-gray-300 border border-zinc-800 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500">
-              <option>Relevant</option>
-              <option>Newest</option>
-              <option>Popular</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Hot Games Section */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
+      <div className="container mx-auto px-4 mt-4 md:mt-8">
+        {/* Featured Games Section */}
+        <div className="mb-8 md:mb-12">
+          <div className="flex items-center justify-between mb-4 md:mb-6">
             <div className="flex items-center">
-              <FaFire className="text-red-500 mr-2" />
-              <h2 className="text-lg font-bold text-white">Hot Games</h2>
+              <FaStar className="text-yellow-500 mr-2 text-lg md:text-xl" />
+              <h2 className="text-lg md:text-xl font-bold text-white">
+                Featured Games
+              </h2>
             </div>
-            <div className="flex space-x-2">
+            <div className="flex space-x-1 md:space-x-2">
               <button className="bg-zinc-900 border border-zinc-800 text-white p-1 rounded hover:bg-zinc-800 transition-colors duration-200">
-                <FaChevronLeft />
+                <FaChevronLeft className="text-sm md:text-base" />
               </button>
               <button className="bg-zinc-900 border border-zinc-800 text-white p-1 rounded hover:bg-zinc-800 transition-colors duration-200">
-                <FaChevronRight />
-              </button>
-              <button className="bg-zinc-900 border border-zinc-800 text-white px-3 py-1 rounded text-sm hover:bg-zinc-800 transition-colors duration-200">
-                See All
+                <FaChevronRight className="text-sm md:text-base" />
               </button>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {hotGames.map((game) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
+            {featuredGames.map((game) => (
               <div
                 key={game.id}
-                className="group cursor-pointer"
+                className="group transform transition-all duration-300 hover:-translate-y-2"
               >
-                <div className="bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden shadow-lg relative">
+                <div className="bg-gradient-to-br from-indigo-900 to-zinc-900 border border-indigo-700 rounded-xl overflow-hidden shadow-2xl relative">
+                  <div className="absolute top-2 left-2 bg-yellow-500 text-black font-bold px-2 py-1 rounded-md text-xs z-10">
+                    FEATURED
+                  </div>
                   <img
-                    src="/api/placeholder/150/200"
+                    src={game.image}
                     alt={game.name}
-                    className="w-full h-40 object-cover"
+                    className="w-full h-40 sm:h-48 md:h-56 object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
-                  <div className="absolute bottom-0 left-0 p-2 text-white">
-                    <h3 className="font-bold text-sm">{game.name}</h3>
-                    {game.subtitle && (
-                      <p className="text-xs text-gray-300">{game.subtitle}</p>
-                    )}
-                    <p className="text-xs text-gray-400 mt-1">
-                      {game.provider}
+                  <div className="p-3 md:p-4 relative z-10">
+                    <h3 className="font-bold text-base md:text-lg text-white mb-1">
+                      {game.name}
+                    </h3>
+                    <p className="text-gray-300 text-xs md:text-sm mb-3 md:mb-4">
+                      {game.description}
                     </p>
-                  </div>
-                  <div className="absolute inset-0 bg-indigo-600 bg-opacity-70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <button className="bg-white text-indigo-600 font-semibold py-1 px-6 rounded-full text-sm transform scale-90 group-hover:scale-100 transition-transform duration-300">
-                      PLAY
+                    <button
+                      className="bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white font-semibold py-1.5 md:py-2 px-4 md:px-8 rounded-lg w-full transform transition-transform duration-300"
+                      onClick={() => navigate(`/games/${game.id}`)}
+                    >
+                      PLAY NOW
                     </button>
                   </div>
                 </div>
@@ -215,97 +132,148 @@ export default function Homepage() {
           </div>
         </div>
 
-        {/* Top Games Section */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
+        {/* Popular Games Section */}
+        <div className="mb-8 md:mb-12">
+          <div className="flex items-center justify-between mb-4 md:mb-6">
             <div className="flex items-center">
-              <FaTrophy className="text-yellow-400 mr-2" />
-              <h2 className="text-lg font-bold text-white">Top Games</h2>
+              <FaFire className="text-red-500 mr-2 text-lg md:text-xl" />
+              <h2 className="text-lg md:text-xl font-bold text-white">
+                Popular Games
+              </h2>
             </div>
-            <div className="flex space-x-2">
+            <div className="flex space-x-1 md:space-x-2">
               <button className="bg-zinc-900 border border-zinc-800 text-white p-1 rounded hover:bg-zinc-800 transition-colors duration-200">
-                <FaChevronLeft />
+                <FaChevronLeft className="text-sm md:text-base" />
               </button>
               <button className="bg-zinc-900 border border-zinc-800 text-white p-1 rounded hover:bg-zinc-800 transition-colors duration-200">
-                <FaChevronRight />
-              </button>
-              <button className="bg-zinc-900 border border-zinc-800 text-white px-3 py-1 rounded text-sm hover:bg-zinc-800 transition-colors duration-200">
-                See All
+                <FaChevronRight className="text-sm md:text-base" />
               </button>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {hotGames
-              .slice(0, 6)
-              .reverse()
-              .map((game) => (
-                <div
-                  key={game.id}
-                  className="group cursor-pointer"
-                >
-                  <div className="bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden shadow-lg relative">
-                    <img
-                      src="/api/placeholder/150/200"
-                      alt={game.name}
-                      className="w-full h-40 object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
-                    <div className="absolute bottom-0 left-0 p-2 text-white">
-                      <h3 className="font-bold text-sm">{game.name}</h3>
-                      {game.subtitle && (
-                        <p className="text-xs text-gray-300">{game.subtitle}</p>
-                      )}
-                      <p className="text-xs text-gray-400 mt-1">
-                        {game.provider}
-                      </p>
-                    </div>
-                    <div className="absolute inset-0 bg-indigo-600 bg-opacity-70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <button className="bg-white text-indigo-600 font-semibold py-1 px-6 rounded-full text-sm transform scale-90 group-hover:scale-100 transition-transform duration-300">
-                        PLAY
-                      </button>
-                    </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
+            {popularGames.map((game) => (
+              <div
+                key={game.id}
+                className="group transform transition-all duration-300 hover:-translate-y-2"
+              >
+                <div className="bg-gradient-to-br from-red-900 to-zinc-900 border border-red-700 rounded-xl overflow-hidden shadow-2xl relative">
+                  <div className="absolute top-2 left-2 bg-red-500 text-white font-bold px-2 py-1 rounded-md text-xs z-10">
+                    POPULAR
+                  </div>
+                  <img
+                    src={game.image}
+                    alt={game.name}
+                    className="w-full h-40 sm:h-48 md:h-56 object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                  <div className="p-3 md:p-4 relative z-10">
+                    <h3 className="font-bold text-base md:text-lg text-white mb-1">
+                      {game.name}
+                    </h3>
+                    <p className="text-gray-300 text-xs md:text-sm mb-3 md:mb-4">
+                      {game.description}
+                    </p>
+                    <button
+                      className="bg-red-600 cursor-pointer hover:bg-red-700 text-white font-semibold py-1.5 md:py-2 px-4 md:px-8 rounded-lg w-full transform transition-transform duration-300"
+                      onClick={() => navigate(`/games/${game.id}`)}
+                    >
+                      PLAY NOW
+                    </button>
                   </div>
                 </div>
-              ))}
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Popular Games */}
+        {/* Game Filters */}
+        <div className="md:hidden mb-4">
+          <button
+            className="flex items-center justify-center bg-zinc-900 border border-zinc-800 text-gray-300 px-4 py-2 rounded-lg w-full"
+            onClick={() => setShowFilters(!showFilters)}
+          >
+            <FaFilter className="mr-2" />
+            <span>Filter Games</span>
+          </button>
+        </div>
+
+        <div
+          className={`flex flex-col md:flex-row items-start md:items-center justify-between mb-4 ${
+            showFilters ? "block" : "hidden md:flex"
+          }`}
+        >
+          <div className="flex flex-wrap gap-2 mb-4 md:mb-0 w-full md:w-auto">
+            {[
+              { label: "All", value: "all" },
+              { label: "Slot Games", value: "slot-games" },
+              { label: "Casino", value: "casino" },
+            ].map((tab) => (
+              <button
+                key={tab.value}
+                className={`px-4 py-1.5 rounded-lg cursor-pointer text-xs md:text-sm font-medium ${
+                  activeTab === tab.value
+                    ? "bg-indigo-600 text-white"
+                    : "bg-zinc-900 text-gray-300 hover:bg-zinc-800"
+                } transition-colors duration-200`}
+                onClick={() => setActiveTab(tab.value)}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex items-center w-full md:w-auto">
+            <span className="text-xs md:text-sm mr-2">Sort by:</span>
+            <select className="bg-zinc-900 text-gray-300 border border-zinc-800 rounded px-2 py-1 text-xs md:text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 w-full md:w-auto">
+              <option>Relevant</option>
+              <option>Newest</option>
+              <option>Popular</option>
+            </select>
+          </div>
+        </div>
+
+        {/* All/Filtered Games Section */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center">
-              <FaDice className="text-purple-400 mr-2" />
-              <h2 className="text-lg font-bold text-white">
-                Games You Might Like
+              <h2 className="text-base md:text-lg font-bold text-white">
+                {activeTab === "all"
+                  ? "All Games"
+                  : activeTab === "slot-games"
+                  ? "Slot Games"
+                  : activeTab === "casino"
+                  ? "Casino Games"
+                  : activeTab === "live"
+                  ? "Live Casino"
+                  : "Lobby Games"}
               </h2>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {hotGames.slice(2, 8).map((game) => (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 md:gap-4">
+            {filteredGames.map((game) => (
               <div
                 key={game.id}
-                className="group cursor-pointer"
+                className="group"
               >
                 <div className="bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden shadow-lg relative">
                   <img
-                    src="/api/placeholder/150/200"
+                    src={game.image}
                     alt={game.name}
-                    className="w-full h-40 object-cover"
+                    className="w-full h-28 sm:h-32 md:h-40 object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
                   <div className="absolute bottom-0 left-0 p-2 text-white">
-                    <h3 className="font-bold text-sm">{game.name}</h3>
-                    {game.subtitle && (
-                      <p className="text-xs text-gray-300">{game.subtitle}</p>
-                    )}
-                    <p className="text-xs text-gray-400 mt-1">
-                      {game.provider}
-                    </p>
+                    <h3 className="font-bold text-xs md:text-sm">
+                      {game.name}
+                    </h3>
                   </div>
                   <div className="absolute inset-0 bg-indigo-600 bg-opacity-70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <button className="bg-white text-indigo-600 font-semibold py-1 px-6 rounded-full text-sm transform scale-90 group-hover:scale-100 transition-transform duration-300">
+                    <button
+                      className="bg-white cursor-pointer text-indigo-600 font-semibold py-1 px-4 md:px-6 rounded-full text-xs md:text-sm transform scale-90 group-hover:scale-100 transition-transform duration-300"
+                      onClick={() => navigate(`/games/${game.id}`)}
+                    >
                       PLAY
                     </button>
                   </div>

@@ -6,10 +6,15 @@ import {
   FaBars,
   FaTimes,
   FaHome,
+  FaHistory,
+  FaStar,
   FaCrown,
   FaSearch,
   FaNetworkWired,
+  FaDice,
 } from "react-icons/fa";
+import { IoGameControllerOutline } from "react-icons/io5";
+import { FaTicketAlt } from "react-icons/fa";
 import { useWeb3 } from "../context/Web3Context";
 import { motion, AnimatePresence } from "framer-motion";
 import { AccountDropdown } from "./AccountDropdown";
@@ -24,17 +29,13 @@ export default function Layout() {
     isOnMonadChain,
     switchToMonadChain,
     formattedBalance,
+    formatAddress,
   } = useWeb3();
   const location = useLocation();
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location]);
-
-  const formatAddress = (address) => {
-    if (!address) return "";
-    return `${address.slice(0, 6)}...${address.slice(-4)}`;
-  };
 
   // Animation variants
   const animations = {
@@ -53,31 +54,71 @@ export default function Layout() {
       hidden: { opacity: 0, x: -20 },
       visible: { opacity: 1, x: 0, transition: { duration: 0.3 } },
     },
+    mobileSidebar: {
+      hidden: { x: "-100%", opacity: 0.8 },
+      visible: {
+        x: 0,
+        opacity: 1,
+        transition: { duration: 0.3, ease: "easeOut" },
+      },
+      exit: {
+        x: "-100%",
+        opacity: 0,
+        transition: { duration: 0.2, ease: "easeIn" },
+      },
+    },
+    overlay: {
+      hidden: { opacity: 0 },
+      visible: { opacity: 0.6, transition: { duration: 0.2 } },
+      exit: { opacity: 0, transition: { duration: 0.2 } },
+    },
   };
 
-  // Reusable navigation link component
-  const NavItem = ({ to, icon, children }) => (
-    <motion.li variants={animations.item}>
-      <NavLink
-        to={to}
-        className={({ isActive }) =>
-          `flex items-center px-4 py-3 rounded-lg transition-all duration-200 ${
+  const NavItem = ({ to, icon, children }) => {
+    const location = useLocation();
+
+    const [path, query] = to.split("?");
+
+    const isActive = (() => {
+      if (to === "/" && location.pathname === "/") return true;
+
+      if (query) {
+        const currentQuery = new URLSearchParams(location.search);
+        const itemQuery = new URLSearchParams(`?${query}`);
+
+        const currentCategory = currentQuery.get("category");
+        const itemCategory = itemQuery.get("category");
+
+        return location.pathname === path && currentCategory === itemCategory;
+      }
+
+      if (path === "/games" && location.pathname === "/games") {
+        return !location.search || location.search === "";
+      }
+
+      return location.pathname === path;
+    })();
+
+    return (
+      <motion.li variants={animations.item}>
+        <NavLink
+          to={to}
+          className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 ${
             isActive
               ? "bg-indigo-600 text-white"
               : "text-gray-300 hover:bg-zinc-900 hover:text-white"
-          }`
-        }
-        end={to === "/"}
-      >
-        {typeof icon === "string" ? (
-          <span className="mr-3 text-lg">{icon}</span>
-        ) : (
-          React.cloneElement(icon, { className: "mr-3 text-lg" })
-        )}
-        <span>{children}</span>
-      </NavLink>
-    </motion.li>
-  );
+          }`}
+        >
+          {typeof icon === "string" ? (
+            <span className="mr-3 text-lg">{icon}</span>
+          ) : (
+            React.cloneElement(icon, { className: "mr-3 text-lg" })
+          )}
+          <span>{children}</span>
+        </NavLink>
+      </motion.li>
+    );
+  };
 
   // Menu sections data
   const menuSections = [
@@ -85,16 +126,28 @@ export default function Layout() {
       title: "MENU",
       items: [
         { icon: <FaHome />, to: "/", label: "Home" },
-        { icon: "⭐", to: "/favorites", label: "Favorites" },
-        { icon: "🕒", to: "/recently-played", label: "Recently Played" },
+        { icon: <FaStar />, to: "/favorites", label: "Favorites" },
+        {
+          icon: <FaHistory />,
+          to: "/recently-played",
+          label: "Recently Played",
+        },
       ],
     },
     {
       title: "GAMES",
       items: [
-        { icon: "🎮", to: "/all-games", label: "All Games" },
-        { icon: "🎰", to: "/slot-games", label: "Slot Games" },
-        { icon: "🎟️", to: "/lottery", label: "Lottery" },
+        { icon: <IoGameControllerOutline />, to: "/games", label: "All Games" },
+        {
+          icon: <FaDice />,
+          to: "/games?category=slot-games",
+          label: "Slot Games",
+        },
+        {
+          icon: <FaTicketAlt />,
+          to: "/games?category=lottery",
+          label: "Lottery",
+        },
       ],
     },
   ];
@@ -127,76 +180,139 @@ export default function Layout() {
     </>
   );
 
+  // Sidebar content component for reuse in both desktop and mobile
+  const SidebarContent = ({ isMobile = false }) => (
+    <div className="h-full flex flex-col">
+      {/* Logo */}
+      <div className="px-6 py-6">
+        <Link
+          to="/"
+          className="flex items-center group"
+          onClick={() => isMobile && setIsMobileMenuOpen(false)}
+        >
+          <motion.div
+            className="h-10 w-10 bg-indigo-600 rounded-lg flex items-center justify-center mr-3 group-hover:bg-indigo-500 transition-colors duration-300"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <FaCrown className="text-yellow-300 text-xl" />
+          </motion.div>
+          <span className="font-bold text-xl text-white">Penny Wager</span>
+        </Link>
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 px-4 py-6">
+        {menuSections.map((section, idx) => (
+          <div
+            key={idx}
+            className="mb-6"
+          >
+            <div className="text-gray-500 text-sm font-medium mb-4 px-2">
+              {section.title}
+            </div>
+            <motion.ul
+              className="space-y-2"
+              variants={animations.container}
+              initial="hidden"
+              animate="visible"
+            >
+              {section.items.map((item, itemIdx) => (
+                <NavItem
+                  key={itemIdx}
+                  to={item.to}
+                  icon={item.icon}
+                >
+                  {item.label}
+                </NavItem>
+              ))}
+            </motion.ul>
+          </div>
+        ))}
+      </nav>
+
+      {/* Mobile Extra Info */}
+      {isMobile && account && (
+        <div className="px-4 py-4 border-t border-zinc-800">
+          {/* Network Status */}
+          <div className="mb-4 flex items-center">
+            <FaNetworkWired className="mr-2" />
+            <NetworkStatus isMobile={true} />
+          </div>
+
+          {/* Balance */}
+          <div className="mb-4">
+            <div className="text-gray-500 text-sm mb-1">Balance</div>
+            <div className="text-white font-medium">
+              {formattedBalance || "0.0"} MON
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Footer */}
+      <div className="p-4 border-t border-zinc-800">
+        <div className="text-center text-xs text-gray-500">
+          <p>© 2025 Penny Wager</p>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="h-screen flex bg-black text-gray-200 overflow-hidden">
-      {/* Sidebar */}
+      {/* Desktop Sidebar */}
       <motion.aside
         className="w-64 bg-black border-r border-zinc-800 hidden lg:block flex-shrink-0 h-screen overflow-y-auto"
         initial="hidden"
         animate="visible"
         variants={animations.sidebar}
       >
-        <div className="h-full flex flex-col">
-          {/* Logo */}
-          <div className="px-6 py-6">
-            <Link
-              to="/"
-              className="flex items-center group"
-            >
-              <motion.div
-                className="h-10 w-10 bg-indigo-600 rounded-lg flex items-center justify-center mr-3 group-hover:bg-indigo-500 transition-colors duration-300"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <FaCrown className="text-yellow-300 text-xl" />
-              </motion.div>
-              <span className="font-bold text-xl text-white">Penny Wager</span>
-            </Link>
-          </div>
-
-          {/* Navigation */}
-          <nav className="flex-1 px-4 py-6">
-            {menuSections.map((section, idx) => (
-              <div
-                key={idx}
-                className="mb-6"
-              >
-                <div className="text-gray-500 text-sm font-medium mb-4 px-2">
-                  {section.title}
-                </div>
-                <motion.ul
-                  className="space-y-2"
-                  variants={animations.container}
-                  initial="hidden"
-                  animate="visible"
-                >
-                  {section.items.map((item, itemIdx) => (
-                    <NavItem
-                      key={itemIdx}
-                      to={item.to}
-                      icon={item.icon}
-                    >
-                      {item.label}
-                    </NavItem>
-                  ))}
-                </motion.ul>
-              </div>
-            ))}
-          </nav>
-
-          {/* Footer */}
-          <div className="p-4 border-t border-zinc-800">
-            <div className="text-center text-xs text-gray-500">
-              <p>© 2025 Penny Wager</p>
-            </div>
-          </div>
-        </div>
+        <SidebarContent />
       </motion.aside>
+
+      {/* Mobile Sidebar drawer */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            {/* Overlay */}
+            <motion.div
+              className="fixed inset-0 bg-black z-40 lg:hidden"
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={animations.overlay}
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+
+            {/* Drawer */}
+            <motion.aside
+              className="fixed z-50 w-64 bg-black border-r border-zinc-800 h-screen overflow-y-auto lg:hidden"
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={animations.mobileSidebar}
+            >
+              <div className="flex justify-end p-4 lg:hidden">
+                <motion.button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2 text-gray-300 rounded hover:bg-zinc-900"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <FaTimes className="h-5 w-5" />
+                </motion.button>
+              </div>
+              <SidebarContent isMobile={true} />
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* Main content flex column */}
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* Header */}
-        <header className="h-16 bg-black border-b border-zinc-800 flex items-center justify-between px-4 flex-shrink-0">
+        <header className="h-16 bg-black border-b border-zinc-800 flex items-center justify-between lg:justify-end px-4 flex-shrink-0">
           {/* Mobile menu button */}
           <motion.button
             className="lg:hidden p-2 rounded-md text-gray-300 hover:bg-zinc-900"
@@ -204,26 +320,8 @@ export default function Layout() {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
           >
-            {isMobileMenuOpen ? (
-              <FaTimes className="h-6 w-6" />
-            ) : (
-              <FaBars className="h-6 w-6" />
-            )}
+            <FaBars className="h-6 w-6" />
           </motion.button>
-
-          {/* Search */}
-          <div className="hidden md:flex flex-1 max-w-md ml-6">
-            <div className="relative w-full">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaSearch className="h-4 w-4 text-gray-500" />
-              </div>
-              <input
-                type="text"
-                className="bg-zinc-900 w-full border border-zinc-800 rounded-md py-2 pl-10 pr-4 text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all duration-200"
-                placeholder="Search for games..."
-              />
-            </div>
-          </div>
 
           {/* Right side items */}
           <div className="flex items-center space-x-4">
@@ -263,86 +361,10 @@ export default function Layout() {
                 {isConnecting ? "Connecting..." : "Connect"}
               </motion.button>
             ) : (
-              <AccountDropdown
-                formatAddress={formatAddress}
-              />
+              <AccountDropdown formatAddress={formatAddress} />
             )}
           </div>
         </header>
-
-        {/* Mobile menu */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              className="lg:hidden bg-black border-b border-zinc-800 flex-shrink-0"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <motion.div
-                className="px-2 pt-2 pb-3 space-y-1"
-                variants={animations.container}
-                initial="hidden"
-                animate="visible"
-              >
-                {/* Mobile Navigation */}
-                {["Home", "Favorites", "Slot Games", "Table Games"].map(
-                  (item, idx) => (
-                    <motion.div
-                      key={idx}
-                      variants={animations.item}
-                    >
-                      <NavLink
-                        to={
-                          item === "Home"
-                            ? "/"
-                            : `/${item.toLowerCase().replace(" ", "-")}`
-                        }
-                        className={({ isActive }) =>
-                          `block px-3 py-2 rounded-md transition-colors duration-200 ${
-                            isActive
-                              ? "bg-indigo-600 text-white"
-                              : "text-gray-300 hover:bg-zinc-900"
-                          }`
-                        }
-                        end={item === "Home"}
-                      >
-                        {item}
-                      </NavLink>
-                    </motion.div>
-                  )
-                )}
-
-                {/* Mobile Chain Status */}
-                {account && !isOnMonadChain() && (
-                  <motion.div variants={animations.item}>
-                    <button
-                      onClick={switchToMonadChain}
-                      className="w-full text-left block px-3 py-2 rounded-md text-indigo-400 hover:bg-zinc-900 flex items-center transition-colors duration-200"
-                    >
-                      <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
-                      Switch to Monad Chain
-                    </button>
-                  </motion.div>
-                )}
-
-                {/* Mobile Balance Display */}
-                {account && (
-                  <motion.div
-                    variants={animations.item}
-                    className="block px-3 py-2 rounded-md text-gray-300"
-                  >
-                    <div className="flex items-center">
-                      <span className="text-gray-500 mr-2">Balance:</span>
-                      <span>{formattedBalance || "0.0"} MON</span>
-                    </div>
-                  </motion.div>
-                )}
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
         {/* Main outlet for page content */}
         <motion.main

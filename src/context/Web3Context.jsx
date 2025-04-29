@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useState } from "react";
 import {
   useAccount,
   useConnect,
@@ -6,10 +6,9 @@ import {
   useBalance,
   useChainId,
   useSwitchChain,
-  useConfig,
 } from "wagmi";
 import { monadTestnet } from "wagmi/chains";
-import { walletConnect } from "wagmi/connectors";
+import WalletSelectionModal from "../components/WalletSelectionModal";
 
 // Create a context for our Web3 functionality
 const Web3Context = createContext(null);
@@ -22,7 +21,8 @@ export const useWeb3 = () => useContext(Web3Context);
 
 // Main provider component
 export const Web3Provider = ({ children }) => {
-  const config = useConfig();
+  // Modal state
+  const [isWalletModalOpen, setWalletModalOpen] = useState(false);
 
   // Account state
   const { address, isConnected } = useAccount();
@@ -55,15 +55,14 @@ export const Web3Provider = ({ children }) => {
       ? parseFloat(balanceData.formatted).toFixed(5)
       : "0.00000";
 
-  // Connect wallet function using WalletConnect
-  const connectWallet = async () => {
-    try {
-      // Use WalletConnect connector which will show multiple wallet options
-      const connector = walletConnect(config);
-      await connect({ connector });
-    } catch (error) {
-      console.error("Connection error:", error);
-    }
+  // Open wallet selection modal
+  const openWalletModal = () => {
+    setWalletModalOpen(true);
+  };
+
+  // Close wallet selection modal
+  const closeWalletModal = () => {
+    setWalletModalOpen(false);
   };
 
   // Function to check if connected to Monad chain
@@ -122,7 +121,7 @@ export const Web3Provider = ({ children }) => {
     isConnecting,
     connectError,
     formattedBalance,
-    connectWallet,
+    connectWallet: openWalletModal,
     disconnectWallet: disconnect,
     formatAddress,
     isOnMonadChain,
@@ -130,10 +129,15 @@ export const Web3Provider = ({ children }) => {
     MONAD_CHAIN_ID,
   };
 
-  return <Web3Context.Provider value={value}>{children}</Web3Context.Provider>;
+  return (
+    <Web3Context.Provider value={value}>
+      {children}
+      <WalletSelectionModal
+        isOpen={isWalletModalOpen}
+        onClose={closeWalletModal}
+      />
+    </Web3Context.Provider>
+  );
 };
 
-// Main provider component with required configuration
-export const Web3ProviderWrapper = ({ children }) => {
-  return <Web3Provider>{children}</Web3Provider>;
-};
+export default Web3Provider;

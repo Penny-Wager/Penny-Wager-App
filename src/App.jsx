@@ -9,6 +9,9 @@ import Homepage from "./pages/Homepage";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import Transactions from "./pages/Transactions";
+import Favorites from "./pages/Favorites";
+import Games from "./pages/Games";
+import RecentlyPlayed from "./pages/RecentlyPlayed";
 
 // Create a client for React Query
 const queryClient = new QueryClient();
@@ -27,6 +30,18 @@ function App() {
                 <Route
                   index
                   element={<Homepage />}
+                />
+                <Route
+                  path="games"
+                  element={<Games />}
+                />
+                <Route
+                  path="favorites"
+                  element={<Favorites />}
+                />
+                <Route
+                  path="recently-played"
+                  element={<RecentlyPlayed />}
                 />
                 <Route
                   path="games/coin-flip"
