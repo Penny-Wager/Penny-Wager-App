@@ -12,6 +12,7 @@ import Transactions from "./pages/Transactions";
 import Favorites from "./pages/Favorites";
 import Games from "./pages/Games";
 import RecentlyPlayed from "./pages/RecentlyPlayed";
+import AviatorGame from "./game/AviatorGame";
 
 // Create a client for React Query
 const queryClient = new QueryClient();
@@ -58,6 +59,10 @@ function App() {
                 <Route
                   path="games/card-pick"
                   element={<div>Card Pick Game</div>}
+                />
+                <Route
+                  path="games/avaitor"
+                  element={<AviatorGame/>}
                 />
                 <Route
                   path="profile"

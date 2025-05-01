@@ -3,75 +3,7 @@ import { useSearchParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaStar, FaHistory, FaPlay } from "react-icons/fa";
 import { useWeb3 } from "../context/Web3Context";
-
-const GAMES_DATA = [
-  {
-    id: "coin-flip",
-    name: "Coin Flip",
-    description: "50/50 chance to double your bet",
-    category: "casino",
-    image: "/images/coin-flip.jpg",
-    minBet: 0.01,
-    maxBet: 10,
-    featured: true,
-    popular: true,
-  },
-  {
-    id: "dice-roll",
-    name: "Dice Roll",
-    description: "Roll the dice and win big",
-    category: "casino",
-    image: "/images/dice-roll.jpg",
-    minBet: 0.05,
-    maxBet: 5,
-    featured: true,
-    popular: false,
-  },
-  {
-    id: "lucky-number",
-    name: "Lucky Number",
-    description: "Pick your lucky number and win",
-    category: "slot-games",
-    image: "/images/lucky-number.jpg",
-    minBet: 0.1,
-    maxBet: 20,
-    featured: false,
-    popular: true,
-  },
-  {
-    id: "card-pick",
-    name: "Card Pick",
-    description: "Pick a card and test your luck",
-    category: "slot-games",
-    image: "/images/card-pick.jpg",
-    minBet: 0.02,
-    maxBet: 8,
-    featured: false,
-    popular: false,
-  },
-  {
-    id: "lottery-game",
-    name: "Lucky Draw",
-    description: "Weekly lottery with massive prizes",
-    category: "lottery",
-    image: "/images/lottery.jpg",
-    minBet: 0.5,
-    maxBet: 10,
-    featured: true,
-    popular: true,
-  },
-  {
-    id: "scratch-card",
-    name: "Scratch Card",
-    description: "Scratch and win instantly",
-    category: "lottery",
-    image: "/images/scratch-card.jpg",
-    minBet: 0.2,
-    maxBet: 2,
-    featured: false,
-    popular: true,
-  },
-];
+import { GAMES_DATA } from "../utils/data/games";
 
 // Game card component
 const GameCard = ({ game, onToggleFavorite, isFavorite }) => {
@@ -87,9 +19,12 @@ const GameCard = ({ game, onToggleFavorite, isFavorite }) => {
     >
       {/* Game Image */}
       <div className="relative h-48 overflow-hidden bg-gradient-to-br from-indigo-900 to-purple-800">
-        {/* Placeholder for game image */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-3xl">{game.name.charAt(0)}</span>
+          <img
+            src={game.image}
+            alt={game.name}
+            className="w-full h-40 sm:h-48 md:h-48 object-cover"
+          />
         </div>
 
         {/* Favorite button */}
@@ -218,9 +153,9 @@ const Games = () => {
     if (!category) return "All Games";
 
     const categoryMap = {
-      casino: "Casino Games",
-      "slot-games": "Slot Games",
-      lottery: "Lottery Games",
+      "casino-games": "Casino Games",
+      "lottery-games": "Lottery Games",
+      "card-games": "Card Games",
     };
 
     return categoryMap[category] || "Games";

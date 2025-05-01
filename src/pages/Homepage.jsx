@@ -8,6 +8,8 @@ import {
   FaFilter,
 } from "react-icons/fa";
 import CoinFlipImage from "../assets/game-images/flip-coin.png";
+import { GAMES_DATA } from "../utils/data/games";
+import { label } from "framer-motion/client";
 
 export default function Homepage() {
   const navigate = useNavigate();
@@ -15,63 +17,22 @@ export default function Homepage() {
   const [filteredGames, setFilteredGames] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
 
-  const games = [
-    {
-      id: "coin-flip",
-      name: "Coin Flip",
-      description: "50/50 chance to double your bet",
-      category: "casino",
-      image: CoinFlipImage,
-      releaseDate: "2025-04-01",
-      featured: true,
-      popular: true,
-    },
-    {
-      id: "dice-roll",
-      name: "Dice Roll",
-      description: "Roll the dice and win big",
-      category: "casino",
-      image: "/game-images/dice-roll.webp",
-      releaseDate: "2025-03-15",
-      featured: false,
-      popular: true,
-    },
-    {
-      id: "card-pick",
-      name: "Card Pick",
-      description: "Pick a card and test your luck",
-      category: "slot-games",
-      image: "/game-images/3-card-pick.webp",
-      releaseDate: "2025-09-20",
-      featured: true,
-      popular: false,
-    },
-    {
-      id: "lucky-number",
-      name: "Lucky Number",
-      description: "Pick your lucky number and win",
-      category: "slot-games",
-      image: "/game-images/lucky-number.jpg",
-      releaseDate: "2025-05-10",
-      featured: false,
-      popular: true,
-    },
-  ];
-
   useEffect(() => {
     // Filter games based on active tab
     if (activeTab === "all") {
-      setFilteredGames(games);
+      setFilteredGames(GAMES_DATA);
     } else {
-      setFilteredGames(games.filter((game) => game.category === activeTab));
+      setFilteredGames(
+        GAMES_DATA.filter((game) => game.category === activeTab)
+      );
     }
   }, [activeTab]);
 
   // Get featured games
-  const featuredGames = games.filter((game) => game.featured);
+  const featuredGames = GAMES_DATA.filter((game) => game.featured);
 
   // Get popular games
-  const popularGames = games.filter((game) => game.popular);
+  const popularGames = GAMES_DATA.filter((game) => game.popular);
 
   return (
     <div className="bg-black text-gray-300 min-h-screen pb-8">
@@ -207,7 +168,8 @@ export default function Homepage() {
             {[
               { label: "All", value: "all" },
               { label: "Slot Games", value: "slot-games" },
-              { label: "Casino", value: "casino" },
+              { label: "Casino", value: "casino-games" },
+              { label: "Card Games", value: "card-games" },
             ].map((tab) => (
               <button
                 key={tab.value}
@@ -240,13 +202,13 @@ export default function Homepage() {
               <h2 className="text-base md:text-lg font-bold text-white">
                 {activeTab === "all"
                   ? "All Games"
-                  : activeTab === "slot-games"
-                  ? "Slot Games"
-                  : activeTab === "casino"
+                  : activeTab === "lottery-games"
+                  ? "Lottery Games"
+                  : activeTab === "casino-games"
                   ? "Casino Games"
-                  : activeTab === "live"
-                  ? "Live Casino"
-                  : "Lobby Games"}
+                  : activeTab === "card-games"
+                  ? "Card Casino"
+                  : "Game"}
               </h2>
             </div>
           </div>

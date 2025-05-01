@@ -13,6 +13,7 @@ import {
   FaNetworkWired,
   FaDice,
 } from "react-icons/fa";
+import { GiCardRandom } from "react-icons/gi";
 import { IoGameControllerOutline } from "react-icons/io5";
 import { FaTicketAlt } from "react-icons/fa";
 import { useWeb3 } from "../context/Web3Context";
@@ -21,6 +22,7 @@ import { AccountDropdown } from "./AccountDropdown";
 
 export default function Layout() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [hasAnimated, setHasAnimated] = useState(false);
   const {
     account,
     connectWallet,
@@ -73,6 +75,14 @@ export default function Layout() {
       exit: { opacity: 0, transition: { duration: 0.2 } },
     },
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setHasAnimated(true);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const NavItem = ({ to, icon, children }) => {
     const location = useLocation();
@@ -140,13 +150,18 @@ export default function Layout() {
         { icon: <IoGameControllerOutline />, to: "/games", label: "All Games" },
         {
           icon: <FaDice />,
-          to: "/games?category=slot-games",
-          label: "Slot Games",
+          to: "/games?category=casino-games",
+          label: "Casino Games",
         },
         {
           icon: <FaTicketAlt />,
-          to: "/games?category=lottery",
-          label: "Lottery",
+          to: "/games?category=lottery-games",
+          label: "Lottery Games",
+        },
+        {
+          icon: <GiCardRandom />,
+          to: "/games?category=card-games",
+          label: "Card Games",
         },
       ],
     },
@@ -214,7 +229,7 @@ export default function Layout() {
             <motion.ul
               className="space-y-2"
               variants={animations.container}
-              initial="hidden"
+              initial={hasAnimated ? "visible" : "hidden"}
               animate="visible"
             >
               {section.items.map((item, itemIdx) => (
