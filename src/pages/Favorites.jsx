@@ -226,9 +226,7 @@ const Favorites = () => {
           } rounded-lg border`}
         >
           <FaStar
-            className={`${
-              isDark ? "text-gray-500" : "text-gray-400"
-            } text-5xl mx-auto mb-4`}
+            className={`text-yellow-500 text-5xl mx-auto mb-4`}
           />
           <h2
             className={`text-xl font-semibold ${
