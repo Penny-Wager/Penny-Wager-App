@@ -3,13 +3,19 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaStar, FaPlay, FaTimes } from "react-icons/fa";
 import { useWeb3 } from "../context/Web3Context";
+import { useTheme } from "../context/ThemeContext";
 import { GAMES_DATA } from "../utils/data/games";
 
 // Favorite Game Card component
 const FavoriteGameCard = ({ game, onRemoveFavorite }) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
   return (
     <motion.div
-      className="bg-zinc-900 rounded-lg overflow-hidden border border-zinc-800 flex flex-col h-full"
+      className={`${
+        isDark ? "bg-zinc-900 border-zinc-800" : "bg-white border-gray-200"
+      } rounded-lg overflow-hidden border flex flex-col h-full`}
       whileHover={{ y: -5, transition: { duration: 0.2 } }}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -47,12 +53,28 @@ const FavoriteGameCard = ({ game, onRemoveFavorite }) => {
 
       {/* Game Info */}
       <div className="p-4 flex-1 flex flex-col">
-        <h3 className="text-xl font-semibold text-white mb-2">{game.name}</h3>
-        <p className="text-gray-400 text-sm mb-4 flex-1">{game.description}</p>
+        <h3
+          className={`text-xl font-semibold ${
+            isDark ? "text-white" : "text-gray-900"
+          } mb-2`}
+        >
+          {game.name}
+        </h3>
+        <p
+          className={`${
+            isDark ? "text-gray-400" : "text-gray-600"
+          } text-sm mb-4 flex-1`}
+        >
+          {game.description}
+        </p>
 
         {/* Game Category Badge */}
         <div className="mb-4">
-          <span className="text-xs px-2 py-1 rounded-full bg-zinc-800 text-gray-300">
+          <span
+            className={`text-xs px-2 py-1 rounded-full ${
+              isDark ? "bg-zinc-800 text-gray-300" : "bg-gray-200 text-gray-700"
+            }`}
+          >
             {game.category === "casino"
               ? "Casino"
               : game.category === "slot-games"
@@ -86,6 +108,8 @@ const Favorites = () => {
   const [favorites, setFavorites] = useState([]);
   const [favoriteGames, setFavoriteGames] = useState([]);
   const { account } = useWeb3();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   useEffect(() => {
     if (account) {
@@ -124,7 +148,11 @@ const Favorites = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div
+      className={`container mx-auto px-4 py-8 ${
+        isDark ? "text-gray-300" : "text-gray-800"
+      }`}
+    >
       {/* Page header */}
       <motion.div
         className="mb-8"
@@ -132,22 +160,36 @@ const Favorites = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-3xl font-bold text-white mb-2">
+        <h1
+          className={`text-3xl font-bold ${
+            isDark ? "text-white" : "text-gray-900"
+          } mb-2`}
+        >
           Your Favorite Games
         </h1>
-        <p className="text-gray-400">
+        <p className={isDark ? "text-gray-400" : "text-gray-600"}>
           Quick access to your favorite games on Penny Wager
         </p>
       </motion.div>
 
       {/* Content based on wallet connection and favorites */}
       {!account ? (
-        <div className="text-center py-12 bg-zinc-900 rounded-lg border border-zinc-800">
+        <div
+          className={`text-center py-12 ${
+            isDark
+              ? "bg-zinc-900 border-zinc-800"
+              : "bg-gray-100 border-gray-200"
+          } rounded-lg border`}
+        >
           <FaStar className="text-yellow-400 text-5xl mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-white mb-2">
+          <h2
+            className={`text-xl font-semibold ${
+              isDark ? "text-white" : "text-gray-900"
+            } mb-2`}
+          >
             Connect Your Wallet
           </h2>
-          <p className="text-gray-400 mb-6">
+          <p className={`${isDark ? "text-gray-400" : "text-gray-600"} mb-6`}>
             Connect your wallet to see and manage your favorite games
           </p>
         </div>
@@ -175,12 +217,26 @@ const Favorites = () => {
           ))}
         </motion.div>
       ) : (
-        <div className="text-center py-12 bg-zinc-900 rounded-lg border border-zinc-800">
-          <FaStar className="text-gray-500 text-5xl mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-white mb-2">
+        <div
+          className={`text-center py-12 ${
+            isDark
+              ? "bg-zinc-900 border-zinc-800"
+              : "bg-gray-100 border-gray-200"
+          } rounded-lg border`}
+        >
+          <FaStar
+            className={`${
+              isDark ? "text-gray-500" : "text-gray-400"
+            } text-5xl mx-auto mb-4`}
+          />
+          <h2
+            className={`text-xl font-semibold ${
+              isDark ? "text-white" : "text-gray-900"
+            } mb-2`}
+          >
             No Favorites Yet
           </h2>
-          <p className="text-gray-400 mb-6">
+          <p className={`${isDark ? "text-gray-400" : "text-gray-600"} mb-6`}>
             You haven't added any games to your favorites yet
           </p>
           <Link

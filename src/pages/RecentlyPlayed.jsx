@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaStar, FaPlay, FaHistory, FaTrash } from "react-icons/fa";
 import { useWeb3 } from "../context/Web3Context";
+import { useTheme } from "../context/ThemeContext";
 import { GAMES_DATA } from "../utils/data/games";
 
 const MOCK_RECENT_DATA = [
@@ -51,10 +52,14 @@ const formatTimeAgo = (dateString) => {
 
 const RecentGameCard = ({ game, recentData, onToggleFavorite, isFavorite }) => {
   const { account } = useWeb3();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   return (
     <motion.div
-      className="bg-zinc-900 rounded-lg overflow-hidden border border-zinc-800 flex flex-col h-full"
+      className={`${
+        isDark ? "bg-zinc-900 border-zinc-800" : "bg-white border-gray-200"
+      } rounded-lg overflow-hidden border flex flex-col h-full`}
       whileHover={{ y: -5, transition: { duration: 0.2 } }}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -93,24 +98,44 @@ const RecentGameCard = ({ game, recentData, onToggleFavorite, isFavorite }) => {
 
       {/* Game Info */}
       <div className="p-4 flex-1 flex flex-col">
-        <h3 className="text-xl font-semibold text-white mb-2">{game.name}</h3>
+        <h3
+          className={`text-xl font-semibold ${
+            isDark ? "text-white" : "text-gray-900"
+          } mb-2`}
+        >
+          {game.name}
+        </h3>
 
         {/* Play Stats */}
         <div className="mb-4 text-sm">
-          <div className="flex justify-between mb-1 text-gray-400">
-            <span>Times played:</span>
-            <span className="text-gray-300">{recentData.timesPlayed}</span>
+          <div className="flex justify-between mb-1">
+            <span className={isDark ? "text-gray-400" : "text-gray-600"}>
+              Times played:
+            </span>
+            <span className={isDark ? "text-gray-300" : "text-gray-800"}>
+              {recentData.timesPlayed}
+            </span>
           </div>
-          <div className="flex justify-between text-gray-400">
-            <span>Last bet:</span>
-            <span className="text-gray-300">{recentData.lastBet} MON</span>
+          <div className="flex justify-between">
+            <span className={isDark ? "text-gray-400" : "text-gray-600"}>
+              Last bet:
+            </span>
+            <span className={isDark ? "text-gray-300" : "text-gray-800"}>
+              {recentData.lastBet} MON
+            </span>
           </div>
         </div>
 
         {/* Winnings */}
-        <div className="mb-4 pb-3 border-b border-zinc-800">
+        <div
+          className={`mb-4 pb-3 border-b ${
+            isDark ? "border-zinc-800" : "border-gray-200"
+          }`}
+        >
           <div className="flex justify-between text-sm">
-            <span className="text-gray-400">Winnings:</span>
+            <span className={isDark ? "text-gray-400" : "text-gray-600"}>
+              Winnings:
+            </span>
             <span
               className={
                 recentData.winnings >= 0 ? "text-green-400" : "text-red-400"
@@ -143,6 +168,8 @@ const RecentlyPlayed = () => {
   const [recentGames, setRecentGames] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const { account } = useWeb3();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   // Load recent games and favorites on mount
   useEffect(() => {
@@ -212,7 +239,11 @@ const RecentlyPlayed = () => {
         transition={{ duration: 0.5 }}
       >
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2">
+          <h1
+            className={`text-3xl font-bold mb-2  ${
+              isDark ? "text-white" : "text-gray-900"
+            }`}
+          >
             Recently Played
           </h1>
           <p className="text-gray-400">
@@ -277,6 +308,5 @@ const RecentlyPlayed = () => {
     </div>
   );
 };
-
 
 export default RecentlyPlayed;

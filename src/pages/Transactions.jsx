@@ -10,10 +10,14 @@ import {
   FaCoins,
 } from "react-icons/fa";
 import { useWeb3 } from "../context/Web3Context";
+import { useTheme } from "../context/ThemeContext";
 import AddressAvatar from "../components/AddressAvatar";
 
 export default function Transactions() {
   const { account, formattedBalance } = useWeb3();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
   const [transactions, setTransactions] = useState([]);
   const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [filterType, setFilterType] = useState("all");
@@ -188,18 +192,30 @@ export default function Transactions() {
 
   if (!account) {
     return (
-      <div className="bg-black text-gray-300 min-h-screen flex items-center justify-center">
+      <div
+        className={`${isDark ? "bg-black" : "bg-white"} ${
+          isDark ? "text-gray-300" : "text-gray-700"
+        } min-h-screen flex items-center justify-center`}
+      >
         <div className="container mx-auto px-4 py-8">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-8 shadow-lg text-center max-w-lg mx-auto">
+          <div
+            className={`${isDark ? "bg-zinc-900" : "bg-gray-50"} ${
+              isDark ? "border-zinc-800" : "border-gray-200"
+            } border rounded-lg p-8 shadow-lg text-center max-w-lg mx-auto`}
+          >
             <div className="mb-6 flex justify-center">
               <div className="h-20 w-20 rounded-full bg-gradient-to-br from-indigo-600 to-indigo-900 flex items-center justify-center text-white">
                 <FaWallet className="text-3xl" />
               </div>
             </div>
-            <h1 className="text-2xl font-bold mb-4 text-white">
+            <h1
+              className={`text-2xl font-bold mb-4 ${
+                isDark ? "text-white" : "text-gray-800"
+              }`}
+            >
               Connect Your Wallet
             </h1>
-            <p className="text-gray-400 mb-8">
+            <p className={`${isDark ? "text-gray-400" : "text-gray-600"} mb-8`}>
               Connect your wallet to view your transaction history.
             </p>
             <button className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg shadow-md transition-colors duration-200">
@@ -212,12 +228,26 @@ export default function Transactions() {
   }
 
   return (
-    <div className="bg-black text-gray-300 min-h-screen pb-8">
+    <div
+      className={`${isDark ? "bg-black" : "bg-white"} ${
+        isDark ? "text-gray-300" : "text-gray-700"
+      } min-h-screen pb-8`}
+    >
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6 text-white">My Transactions</h1>
+        <h1
+          className={`text-3xl font-bold mb-6 ${
+            isDark ? "text-white" : "text-gray-800"
+          }`}
+        >
+          My Transactions
+        </h1>
 
         {/* Account overview */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 shadow-lg mb-8">
+        <div
+          className={`${isDark ? "bg-zinc-900" : "bg-gray-50"} ${
+            isDark ? "border-zinc-800" : "border-gray-200"
+          } border rounded-lg p-6 shadow-lg mb-8`}
+        >
           <div className="flex flex-col md:flex-row md:items-center md:justify-between">
             <div className="flex gap-5 items-center mb-4 md:mb-0">
               <AddressAvatar
@@ -225,15 +255,31 @@ export default function Transactions() {
                 size="md"
               />
               <div>
-                <h2 className="text-xl font-bold text-white">Account</h2>
-                <p className="text-gray-400 flex items-center">
+                <h2
+                  className={`text-xl font-bold ${
+                    isDark ? "text-white" : "text-gray-800"
+                  }`}
+                >
+                  Account
+                </h2>
+                <p
+                  className={`${
+                    isDark ? "text-gray-400" : "text-gray-500"
+                  } flex items-center`}
+                >
                   <FaWallet className="mr-1" /> {formatAddress(account)}
                 </p>
               </div>
             </div>
 
             <div className="flex flex-col items-start md:items-end">
-              <p className="text-lg font-medium text-gray-400">Balance</p>
+              <p
+                className={`text-lg font-medium ${
+                  isDark ? "text-gray-400" : "text-gray-500"
+                }`}
+              >
+                Balance
+              </p>
               <p className="text-2xl font-bold text-indigo-400">
                 {parseFloat(formattedBalance).toFixed(4)} MONAD
               </p>
@@ -242,18 +288,28 @@ export default function Transactions() {
         </div>
 
         {/* Filters and search */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 shadow-lg mb-8">
+        <div
+          className={`${isDark ? "bg-zinc-900" : "bg-gray-50"} ${
+            isDark ? "border-zinc-800" : "border-gray-200"
+          } border rounded-lg p-6 shadow-lg mb-8`}
+        >
           <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:items-center lg:justify-between">
             <div className="flex items-center">
               <FaFilter className="text-indigo-400 mr-2" />
-              <span className="text-white mr-3">Filter:</span>
+              <span
+                className={`${isDark ? "text-white" : "text-gray-800"} mr-3`}
+              >
+                Filter:
+              </span>
               <div className="flex space-x-2">
                 <button
                   onClick={() => setFilterType("all")}
                   className={`px-3 py-1 rounded-lg ${
                     filterType === "all"
                       ? "bg-indigo-600 text-white"
-                      : "bg-zinc-800 text-gray-300 hover:bg-zinc-700"
+                      : isDark
+                      ? "bg-zinc-800 text-gray-300 hover:bg-zinc-700"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                   }`}
                 >
                   All
@@ -263,7 +319,9 @@ export default function Transactions() {
                   className={`px-3 py-1 rounded-lg ${
                     filterType === "bet"
                       ? "bg-indigo-600 text-white"
-                      : "bg-zinc-800 text-gray-300 hover:bg-zinc-700"
+                      : isDark
+                      ? "bg-zinc-800 text-gray-300 hover:bg-zinc-700"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                   }`}
                 >
                   Bets
@@ -273,7 +331,9 @@ export default function Transactions() {
                   className={`px-3 py-1 rounded-lg ${
                     filterType === "win"
                       ? "bg-indigo-600 text-white"
-                      : "bg-zinc-800 text-gray-300 hover:bg-zinc-700"
+                      : isDark
+                      ? "bg-zinc-800 text-gray-300 hover:bg-zinc-700"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                   }`}
                 >
                   Wins
@@ -283,7 +343,9 @@ export default function Transactions() {
                   className={`px-3 py-1 rounded-lg ${
                     filterType === "deposit"
                       ? "bg-indigo-600 text-white"
-                      : "bg-zinc-800 text-gray-300 hover:bg-zinc-700"
+                      : isDark
+                      ? "bg-zinc-800 text-gray-300 hover:bg-zinc-700"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                   }`}
                 >
                   Deposits
@@ -293,7 +355,9 @@ export default function Transactions() {
                   className={`px-3 py-1 rounded-lg ${
                     filterType === "withdrawal"
                       ? "bg-indigo-600 text-white"
-                      : "bg-zinc-800 text-gray-300 hover:bg-zinc-700"
+                      : isDark
+                      ? "bg-zinc-800 text-gray-300 hover:bg-zinc-700"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                   }`}
                 >
                   Withdrawals
@@ -308,16 +372,32 @@ export default function Transactions() {
                   placeholder="Search transactions..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-2 pl-10 w-full text-white focus:outline-none focus:border-indigo-500"
+                  className={`${
+                    isDark
+                      ? "bg-zinc-800 border-zinc-700"
+                      : "bg-white border-gray-300"
+                  } border rounded-lg px-4 py-2 pl-10 w-full ${
+                    isDark ? "text-white" : "text-gray-800"
+                  } focus:outline-none focus:border-indigo-500`}
                 />
-                <FaSearch className="absolute left-3 top-3 text-gray-400" />
+                <FaSearch
+                  className={`absolute left-3 top-3 ${
+                    isDark ? "text-gray-400" : "text-gray-500"
+                  }`}
+                />
               </div>
 
               <button
                 onClick={() =>
                   setSortOrder(sortOrder === "newest" ? "oldest" : "newest")
                 }
-                className="flex items-center justify-center bg-zinc-800 hover:bg-zinc-700 text-white px-4 py-2 rounded-lg"
+                className={`flex items-center justify-center ${
+                  isDark
+                    ? "bg-zinc-800 hover:bg-zinc-700"
+                    : "bg-gray-200 hover:bg-gray-300"
+                } ${
+                  isDark ? "text-white" : "text-gray-800"
+                } px-4 py-2 rounded-lg`}
               >
                 {sortOrder === "newest" ? (
                   <>
@@ -334,13 +414,25 @@ export default function Transactions() {
         </div>
 
         {/* Transaction List */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 shadow-lg mb-8">
+        <div
+          className={`${isDark ? "bg-zinc-900" : "bg-gray-50"} ${
+            isDark ? "border-zinc-800" : "border-gray-200"
+          } border rounded-lg p-6 shadow-lg mb-8`}
+        >
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-white flex items-center">
+            <h3
+              className={`text-lg font-semibold ${
+                isDark ? "text-white" : "text-gray-800"
+              } flex items-center`}
+            >
               <FaExchangeAlt className="text-indigo-400 mr-2" />
               Transaction History
             </h3>
-            <span className="text-gray-400 text-sm">
+            <span
+              className={`${
+                isDark ? "text-gray-400" : "text-gray-500"
+              } text-sm`}
+            >
               {filteredTransactions.length} transactions found
             </span>
           </div>
@@ -351,14 +443,22 @@ export default function Transactions() {
             </div>
           ) : filteredTransactions.length === 0 ? (
             <div className="py-16 text-center">
-              <p className="text-gray-400">No transactions found</p>
+              <p className={`${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                No transactions found
+              </p>
             </div>
           ) : (
             <>
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="text-left text-gray-400 border-b border-zinc-800">
+                    <tr
+                      className={`text-left ${
+                        isDark ? "text-gray-400" : "text-gray-500"
+                      } ${
+                        isDark ? "border-zinc-800" : "border-gray-200"
+                      } border-b`}
+                    >
                       <th className="pb-4 pr-6">Type</th>
                       <th className="pb-4 pr-6">Amount</th>
                       <th className="pb-4 pr-6 hidden md:table-cell">Game</th>
@@ -370,7 +470,11 @@ export default function Transactions() {
                     {currentTransactions.map((tx) => (
                       <tr
                         key={tx.id}
-                        className="border-b border-zinc-800 hover:bg-zinc-800 cursor-pointer"
+                        className={`${
+                          isDark ? "border-zinc-800" : "border-gray-200"
+                        } border-b ${
+                          isDark ? "hover:bg-zinc-800" : "hover:bg-gray-100"
+                        } cursor-pointer`}
                       >
                         <td className="py-4 pr-6">
                           <TransactionBadge type={tx.type} />
@@ -393,8 +497,20 @@ export default function Transactions() {
                           {tx.game || "-"}
                         </td>
                         <td className="py-4 pr-6">
-                          <div className="text-white">{tx.date}</div>
-                          <div className="text-gray-400 text-sm">{tx.time}</div>
+                          <div
+                            className={`${
+                              isDark ? "text-white" : "text-gray-800"
+                            }`}
+                          >
+                            {tx.date}
+                          </div>
+                          <div
+                            className={`${
+                              isDark ? "text-gray-400" : "text-gray-500"
+                            } text-sm`}
+                          >
+                            {tx.time}
+                          </div>
                         </td>
                         <td className="py-4">
                           <span
@@ -418,16 +534,22 @@ export default function Transactions() {
                 <button
                   onClick={goToPreviousPage}
                   disabled={currentPage === 1}
-                  className={`bg-zinc-800 text-white py-2 px-4 rounded-lg transition-colors duration-200 ${
+                  className={`${isDark ? "bg-zinc-800" : "bg-gray-200"} ${
+                    isDark ? "text-white" : "text-gray-800"
+                  } py-2 px-4 rounded-lg transition-colors duration-200 ${
                     currentPage === 1
                       ? "opacity-50 cursor-not-allowed"
-                      : "hover:bg-zinc-700"
+                      : isDark
+                      ? "hover:bg-zinc-700"
+                      : "hover:bg-gray-300"
                   }`}
                 >
                   Previous
                 </button>
 
-                <div className="text-gray-400">
+                <div
+                  className={`${isDark ? "text-gray-400" : "text-gray-500"}`}
+                >
                   Page {currentPage} of {totalPages}
                 </div>
 
@@ -446,8 +568,6 @@ export default function Transactions() {
             </>
           )}
         </div>
-
-        {/* Transaction Details Modal would go here */}
       </div>
     </div>
   );

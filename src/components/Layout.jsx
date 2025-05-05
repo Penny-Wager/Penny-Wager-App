@@ -13,10 +13,12 @@ import {
   FaNetworkWired,
   FaDice,
 } from "react-icons/fa";
+import { MdOutlineLightMode, MdOutlineDarkMode } from "react-icons/md";
 import { GiCardRandom } from "react-icons/gi";
 import { IoGameControllerOutline } from "react-icons/io5";
 import { FaTicketAlt } from "react-icons/fa";
 import { useWeb3 } from "../context/Web3Context";
+import { useTheme } from "../context/ThemeContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { AccountDropdown } from "./AccountDropdown";
 
@@ -33,7 +35,10 @@ export default function Layout() {
     formattedBalance,
     formatAddress,
   } = useWeb3();
+  const { theme, toggleTheme } = useTheme();
   const location = useLocation();
+
+  const isDark = theme === "dark";
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -116,7 +121,11 @@ export default function Layout() {
           className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 ${
             isActive
               ? "bg-indigo-600 text-white"
-              : "text-gray-300 hover:bg-zinc-900 hover:text-white"
+              : `${
+                  isDark
+                    ? "text-gray-300 hover:bg-zinc-900"
+                    : "text-gray-700 hover:bg-gray-100"
+                } hover:text-indigo-600`
           }`}
         >
           {typeof icon === "string" ? (
@@ -212,7 +221,13 @@ export default function Layout() {
           >
             <FaCrown className="text-yellow-300 text-xl" />
           </motion.div>
-          <span className="font-bold text-xl text-white">Penny Wager</span>
+          <span
+            className={`font-bold text-xl ${
+              isDark ? "text-white" : "text-gray-800"
+            }`}
+          >
+            Penny Wager
+          </span>
         </Link>
       </div>
 
@@ -223,7 +238,11 @@ export default function Layout() {
             key={idx}
             className="mb-6"
           >
-            <div className="text-gray-500 text-sm font-medium mb-4 px-2">
+            <div
+              className={`${
+                isDark ? "text-gray-500" : "text-gray-600"
+              } text-sm font-medium mb-4 px-2`}
+            >
               {section.title}
             </div>
             <motion.ul
@@ -248,7 +267,11 @@ export default function Layout() {
 
       {/* Mobile Extra Info */}
       {isMobile && account && (
-        <div className="px-4 py-4 border-t border-zinc-800">
+        <div
+          className={`px-4 py-4 border-t ${
+            isDark ? "border-zinc-800" : "border-gray-200"
+          }`}
+        >
           {/* Network Status */}
           <div className="mb-4 flex items-center">
             <FaNetworkWired className="mr-2" />
@@ -257,8 +280,18 @@ export default function Layout() {
 
           {/* Balance */}
           <div className="mb-4">
-            <div className="text-gray-500 text-sm mb-1">Balance</div>
-            <div className="text-white font-medium">
+            <div
+              className={`${
+                isDark ? "text-gray-500" : "text-gray-600"
+              } text-sm mb-1`}
+            >
+              Balance
+            </div>
+            <div
+              className={`${
+                isDark ? "text-white" : "text-gray-800"
+              } font-medium`}
+            >
               {formattedBalance || "0.0"} MON
             </div>
           </div>
@@ -266,7 +299,11 @@ export default function Layout() {
       )}
 
       {/* Footer */}
-      <div className="p-4 border-t border-zinc-800">
+      <div
+        className={`p-4 border-t ${
+          isDark ? "border-zinc-800" : "border-gray-200"
+        }`}
+      >
         <div className="text-center text-xs text-gray-500">
           <p>© 2025 Penny Wager</p>
         </div>
@@ -274,11 +311,15 @@ export default function Layout() {
     </div>
   );
 
+  const bgColor = isDark ? "bg-black" : "bg-white";
+  const textColor = isDark ? "text-gray-200" : "text-gray-800";
+  const borderColor = isDark ? "border-zinc-800" : "border-gray-200";
+
   return (
-    <div className="h-screen flex bg-black text-gray-200 overflow-hidden">
+    <div className={`h-screen flex ${bgColor} ${textColor} overflow-hidden`}>
       {/* Desktop Sidebar */}
       <motion.aside
-        className="w-64 bg-black border-r border-zinc-800 hidden lg:block flex-shrink-0 h-screen overflow-y-auto"
+        className={`w-64 ${bgColor} border-r ${borderColor} hidden lg:block flex-shrink-0 h-screen overflow-y-auto`}
         initial="hidden"
         animate="visible"
         variants={animations.sidebar}
@@ -302,7 +343,7 @@ export default function Layout() {
 
             {/* Drawer */}
             <motion.aside
-              className="fixed z-50 w-64 bg-black border-r border-zinc-800 h-screen overflow-y-auto lg:hidden"
+              className={`fixed z-50 w-64 ${bgColor} border-r ${borderColor} h-screen overflow-y-auto lg:hidden`}
               initial="hidden"
               animate="visible"
               exit="exit"
@@ -311,7 +352,11 @@ export default function Layout() {
               <div className="flex justify-end p-4 lg:hidden">
                 <motion.button
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="p-2 text-gray-300 rounded hover:bg-zinc-900"
+                  className={`p-2 ${
+                    isDark
+                      ? "text-gray-300 hover:bg-zinc-900"
+                      : "text-gray-600 hover:bg-gray-100"
+                  } rounded`}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                 >
@@ -327,10 +372,16 @@ export default function Layout() {
       {/* Main content flex column */}
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* Header */}
-        <header className="h-16 bg-black border-b border-zinc-800 flex items-center justify-between lg:justify-end px-4 flex-shrink-0">
+        <header
+          className={`h-16 ${bgColor} border-b ${borderColor} flex items-center justify-between lg:justify-end px-4 flex-shrink-0`}
+        >
           {/* Mobile menu button */}
           <motion.button
-            className="lg:hidden p-2 rounded-md text-gray-300 hover:bg-zinc-900"
+            className={`lg:hidden p-2 rounded-md ${
+              isDark
+                ? "text-gray-300 hover:bg-zinc-900"
+                : "text-gray-600 hover:bg-gray-100"
+            }`}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
@@ -340,9 +391,28 @@ export default function Layout() {
 
           {/* Right side items */}
           <div className="flex items-center space-x-4">
+            {/* Theme Toggle Button */}
+            <motion.button
+              onClick={toggleTheme}
+              className={`p-2 rounded-md cursor-pointer ${
+                isDark
+                  ? "bg-zinc-700 text-yellow-300"
+                  : "bg-gray-100 text-gray-700"
+              }`}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            >
+              {isDark ? <MdOutlineLightMode /> : <MdOutlineDarkMode />}
+            </motion.button>
+
             {/* Network Status Indicator */}
             {account && (
-              <div className="hidden md:flex items-center bg-zinc-900 px-3 py-1.5 rounded-md border border-zinc-800 cursor-pointer">
+              <div
+                className={`hidden md:flex items-center ${
+                  isDark ? "bg-zinc-900" : "bg-gray-100"
+                } px-3 py-1.5 rounded-md border ${borderColor} cursor-pointer`}
+              >
                 <FaNetworkWired className="text-sm mr-2" />
                 <NetworkStatus />
               </div>
@@ -351,12 +421,18 @@ export default function Layout() {
             {/* Balance */}
             {account && (
               <motion.div
-                className="hidden sm:flex bg-zinc-900 px-3 py-1.5 rounded-md border border-zinc-800 cursor-pointer"
+                className={`hidden sm:flex ${
+                  isDark ? "bg-zinc-900" : "bg-gray-100"
+                } px-3 py-1.5 rounded-md border ${borderColor} cursor-pointer`}
                 whileHover={{ y: -2 }}
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
               >
                 <div className="flex items-center">
-                  <span className="text-white font-medium">
+                  <span
+                    className={`${
+                      isDark ? "text-white" : "text-gray-800"
+                    } font-medium`}
+                  >
                     {formattedBalance || "0.0"} MON
                   </span>
                 </div>
@@ -383,7 +459,7 @@ export default function Layout() {
 
         {/* Main outlet for page content */}
         <motion.main
-          className="flex-1 overflow-y-auto bg-black"
+          className={`flex-1 overflow-y-auto ${bgColor}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}

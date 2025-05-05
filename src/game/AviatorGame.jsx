@@ -126,6 +126,7 @@ const AviatorGame = () => {
   ]);
   const [hasBet, setHasBet] = useState(false);
   const [hasCashedOut, setHasCashedOut] = useState(false);
+  const [crashPoint, setCrashPoint] = useState(null);
 
   // Animation refs
   const planeRef = useRef(null);
@@ -137,22 +138,23 @@ const AviatorGame = () => {
     useWeb3();
 
   // Wagmi hooks
-  const { writeContractAsync: placeBet } = useWriteContract();
-  const { writeContractAsync: cashOut } = useWriteContract();
-  const { data: placeBetTxHash, isPending: isPlacingBet } = useWriteContract();
-  const { data: cashOutTxHash, isPending: isCashingOut } = useWriteContract();
+  const { writeContract, isPending: isPendingWrite } = useWriteContract();
+  const [placeBetTxHash, setPlaceBetTxHash] = useState(null);
+  const [cashOutTxHash, setCashOutTxHash] = useState(null);
 
   // Processing transaction state
   const { isLoading: isPlaceBetProcessing } = useWaitForTransactionReceipt({
     hash: placeBetTxHash,
+    enabled: !!placeBetTxHash,
   });
 
   const { isLoading: isCashOutProcessing } = useWaitForTransactionReceipt({
     hash: cashOutTxHash,
+    enabled: !!cashOutTxHash,
   });
 
   const isProcessing =
-    isPlacingBet || isPlaceBetProcessing || isCashingOut || isCashOutProcessing;
+    isPendingWrite || isPlaceBetProcessing || isCashOutProcessing;
 
   // Read contract data for player bet
   const { data: playerBetData } = useReadContract({
@@ -160,7 +162,7 @@ const AviatorGame = () => {
     abi: aviatorContractAbi,
     functionName: "getPlayerBet",
     args: [account],
-    enabled: isConnected && account,
+    enabled: isConnected && !!account,
     watch: true,
   });
 
@@ -180,18 +182,19 @@ const AviatorGame = () => {
     }
 
     if (!isOnMonadChain()) {
-      await switchToMonadChain();
-      return;
+      const switched = await switchToMonadChain();
+      if (!switched) return;
     }
 
     try {
-      await placeBet({
+      const hash = await writeContract({
         address: CONTRACT_ADDRESS,
         abi: aviatorContractAbi,
         functionName: "placeBet",
         args: [parseEther(betAmount)],
       });
 
+      setPlaceBetTxHash(hash);
       setHasBet(true);
       setHasCashedOut(false);
     } catch (error) {
@@ -204,12 +207,13 @@ const AviatorGame = () => {
     if (!hasBet || hasCashedOut) return;
 
     try {
-      await cashOut({
+      const hash = await writeContract({
         address: CONTRACT_ADDRESS,
         abi: aviatorContractAbi,
         functionName: "cashOut",
       });
 
+      setCashOutTxHash(hash);
       setHasCashedOut(true);
     } catch (error) {
       console.error("Error cashing out:", error);
@@ -219,6 +223,11 @@ const AviatorGame = () => {
   // Sample simulation for game flow
   useEffect(() => {
     if (gamePhase === "waiting") {
+      // Generate the crash point at the start of each game
+      const newCrashPoint = generateCrashPoint();
+      setCrashPoint(newCrashPoint);
+      console.log("New crash point set:", newCrashPoint);
+
       // Start a new game after 3 seconds
       gameTimerRef.current = setTimeout(() => {
         setGamePhase("flying");
@@ -236,7 +245,12 @@ const AviatorGame = () => {
   const startFlying = () => {
     let currentMultiplier = 1.0;
     let speed = 0.01;
-    const crashPoint = generateCrashPoint();
+
+    // Using the stored crash point
+    if (!crashPoint) {
+      console.error("No crash point set!");
+      return;
+    }
 
     setMultiplier(currentMultiplier);
 
@@ -271,6 +285,7 @@ const AviatorGame = () => {
           setMultiplier(1.0);
           setHasBet(false);
           setHasCashedOut(false);
+          setCrashPoint(null); // Clear the crash point for the next game
         }, 3000);
       }
     }, 100);
@@ -278,9 +293,19 @@ const AviatorGame = () => {
 
   // Generate a random crash point (weighted toward lower values)
   const generateCrashPoint = () => {
-    // This is a simple implementation - the smart contract would use a provably fair algorithm
+    // The range is from 1.0 to 100
+    // Using exponential distribution to weight toward lower values
     const random = Math.random();
-    return 1 + Math.pow(Math.random() * 0.99, -1) / 10;
+    // Base multiplier 1.0, max potential 100
+    const exponentialValue = -Math.log(1 - random * 0.99) / 0.1;
+    const crashPoint = 1.0 + exponentialValue * 6.0; // Scale to desired range
+
+    // Limit to max of 100
+    const finalCrashPoint = Math.min(100, crashPoint);
+    const rounded = parseFloat(finalCrashPoint.toFixed(2)); // limit to 2 decimal places
+
+    console.log("Generated crash point:", rounded);
+    return rounded;
   };
 
   // Format the multiplier for display
@@ -302,8 +327,6 @@ const AviatorGame = () => {
   return (
     <div className="w-full max-w-6xl mx-auto p-4">
       <div className="bg-zinc-900 rounded-xl overflow-hidden border border-zinc-800 shadow-lg">
-       
-
         {/* Game Main Area */}
         <div className="flex flex-col md:flex-row">
           {/* Game Visuals */}

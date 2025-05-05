@@ -9,10 +9,12 @@ import {
 } from "react-icons/fa";
 import CoinFlipImage from "../assets/game-images/flip-coin.png";
 import { GAMES_DATA } from "../utils/data/games";
-import { label } from "framer-motion/client";
+import { useTheme } from "../context/ThemeContext";
 
 export default function Homepage() {
   const navigate = useNavigate();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const [activeTab, setActiveTab] = useState("all");
   const [filteredGames, setFilteredGames] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
@@ -35,7 +37,11 @@ export default function Homepage() {
   const popularGames = GAMES_DATA.filter((game) => game.popular);
 
   return (
-    <div className="bg-black text-gray-300 min-h-screen pb-8">
+    <div
+      className={`${
+        isDark ? "bg-black text-gray-300" : "bg-white text-gray-800"
+      } min-h-screen pb-8`}
+    >
       {/* Main Content */}
       <div className="container mx-auto px-4 mt-4 md:mt-8">
         {/* Featured Games Section */}
@@ -43,15 +49,31 @@ export default function Homepage() {
           <div className="flex items-center justify-between mb-4 md:mb-6">
             <div className="flex items-center">
               <FaStar className="text-yellow-500 mr-2 text-lg md:text-xl" />
-              <h2 className="text-lg md:text-xl font-bold text-white">
+              <h2
+                className={`text-lg md:text-xl font-bold ${
+                  isDark ? "text-white" : "text-gray-900"
+                }`}
+              >
                 Featured Games
               </h2>
             </div>
             <div className="flex space-x-1 md:space-x-2">
-              <button className="bg-zinc-900 border border-zinc-800 text-white p-1 rounded hover:bg-zinc-800 transition-colors duration-200">
+              <button
+                className={`border p-1 cursor-pointer rounded hover:transition-colors duration-200 ${
+                  isDark
+                    ? "bg-zinc-900 border-zinc-800 text-white hover:bg-zinc-800"
+                    : "bg-white border-gray-300 text-gray-900 hover:bg-gray-100"
+                }`}
+              >
                 <FaChevronLeft className="text-sm md:text-base" />
               </button>
-              <button className="bg-zinc-900 border border-zinc-800 text-white p-1 rounded hover:bg-zinc-800 transition-colors duration-200">
+              <button
+                className={`border p-1 cursor-pointer rounded hover:transition-colors duration-200 ${
+                  isDark
+                    ? "bg-zinc-900 border-zinc-800 text-white hover:bg-zinc-800"
+                    : "bg-white border-gray-300 text-gray-900 hover:bg-gray-100"
+                }`}
+              >
                 <FaChevronRight className="text-sm md:text-base" />
               </button>
             </div>
@@ -98,15 +120,31 @@ export default function Homepage() {
           <div className="flex items-center justify-between mb-4 md:mb-6">
             <div className="flex items-center">
               <FaFire className="text-red-500 mr-2 text-lg md:text-xl" />
-              <h2 className="text-lg md:text-xl font-bold text-white">
+              <h2
+                className={`text-lg md:text-xl font-bold ${
+                  isDark ? "text-white" : "text-gray-900"
+                }`}
+              >
                 Popular Games
               </h2>
             </div>
             <div className="flex space-x-1 md:space-x-2">
-              <button className="bg-zinc-900 border border-zinc-800 text-white p-1 rounded hover:bg-zinc-800 transition-colors duration-200">
+              <button
+                className={`border p-1 cursor-pointer rounded hover:transition-colors duration-200 ${
+                  isDark
+                    ? "bg-zinc-900 border-zinc-800 text-white hover:bg-zinc-800"
+                    : "bg-white border-gray-300 text-gray-900 hover:bg-gray-100"
+                }`}
+              >
                 <FaChevronLeft className="text-sm md:text-base" />
               </button>
-              <button className="bg-zinc-900 border border-zinc-800 text-white p-1 rounded hover:bg-zinc-800 transition-colors duration-200">
+              <button
+                className={`border p-1 cursor-pointer rounded hover:transition-colors duration-200 ${
+                  isDark
+                    ? "bg-zinc-900 border-zinc-800 text-white hover:bg-zinc-800"
+                    : "bg-white border-gray-300 text-gray-900 hover:bg-gray-100"
+                }`}
+              >
                 <FaChevronRight className="text-sm md:text-base" />
               </button>
             </div>
@@ -176,7 +214,9 @@ export default function Homepage() {
                 className={`px-4 py-1.5 rounded-lg cursor-pointer text-xs md:text-sm font-medium ${
                   activeTab === tab.value
                     ? "bg-indigo-600 text-white"
-                    : "bg-zinc-900 text-gray-300 hover:bg-zinc-800"
+                    : isDark
+                    ? "bg-zinc-900 text-gray-300 hover:bg-zinc-800"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                 } transition-colors duration-200`}
                 onClick={() => setActiveTab(tab.value)}
               >
@@ -187,7 +227,13 @@ export default function Homepage() {
 
           <div className="flex items-center w-full md:w-auto">
             <span className="text-xs md:text-sm mr-2">Sort by:</span>
-            <select className="bg-zinc-900 text-gray-300 border border-zinc-800 rounded px-2 py-1 text-xs md:text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 w-full md:w-auto">
+            <select
+              className={`${
+                isDark
+                  ? "bg-zinc-900 text-gray-300 border-zinc-800"
+                  : "bg-white text-gray-700 border-gray-300"
+              } border rounded px-2 py-1 text-xs md:text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 w-full md:w-auto`}
+            >
               <option>Relevant</option>
               <option>Newest</option>
               <option>Popular</option>
@@ -199,7 +245,11 @@ export default function Homepage() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center">
-              <h2 className="text-base md:text-lg font-bold text-white">
+              <h2
+                className={`text-base md:text-lg font-bold ${
+                  isDark ? "text-white" : "text-gray-900"
+                }`}
+              >
                 {activeTab === "all"
                   ? "All Games"
                   : activeTab === "lottery-games"
@@ -219,7 +269,13 @@ export default function Homepage() {
                 key={game.id}
                 className="group"
               >
-                <div className="bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden shadow-lg relative">
+                <div
+                  className={`${
+                    isDark
+                      ? "bg-zinc-900 border-zinc-800"
+                      : "bg-white border-gray-200"
+                  } border rounded-lg overflow-hidden shadow-lg relative`}
+                >
                   <img
                     src={game.image}
                     alt={game.name}

@@ -3,15 +3,20 @@ import { useSearchParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaStar, FaHistory, FaPlay } from "react-icons/fa";
 import { useWeb3 } from "../context/Web3Context";
+import { useTheme } from "../context/ThemeContext";
 import { GAMES_DATA } from "../utils/data/games";
 
 // Game card component
 const GameCard = ({ game, onToggleFavorite, isFavorite }) => {
   const { account } = useWeb3();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   return (
     <motion.div
-      className="bg-zinc-900 rounded-lg overflow-hidden border border-zinc-800 flex flex-col h-full"
+      className={`${
+        isDark ? "bg-zinc-900 border-zinc-800" : "bg-white border-gray-200"
+      } rounded-lg overflow-hidden border flex flex-col h-full shadow-md`}
       whileHover={{ y: -5, transition: { duration: 0.2 } }}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -46,18 +51,34 @@ const GameCard = ({ game, onToggleFavorite, isFavorite }) => {
 
       {/* Game Info */}
       <div className="p-4 flex-1 flex flex-col">
-        <h3 className="text-xl font-semibold text-white mb-2">{game.name}</h3>
-        <p className="text-gray-400 text-sm mb-4 flex-1">{game.description}</p>
+        <h3
+          className={`text-xl font-semibold ${
+            isDark ? "text-white" : "text-gray-800"
+          } mb-2`}
+        >
+          {game.name}
+        </h3>
+        <p
+          className={`${
+            isDark ? "text-gray-400" : "text-gray-600"
+          } text-sm mb-4 flex-1`}
+        >
+          {game.description}
+        </p>
 
         {/* Game Details */}
         <div className="text-xs text-gray-500 mb-4">
           <div className="flex justify-between mb-1">
             <span>Min Bet:</span>
-            <span className="text-gray-300">{game.minBet} MON</span>
+            <span className={isDark ? "text-gray-300" : "text-gray-700"}>
+              {game.minBet} MON
+            </span>
           </div>
           <div className="flex justify-between">
             <span>Max Bet:</span>
-            <span className="text-gray-300">{game.maxBet} MON</span>
+            <span className={isDark ? "text-gray-300" : "text-gray-700"}>
+              {game.maxBet} MON
+            </span>
           </div>
         </div>
 
@@ -79,6 +100,9 @@ const GameCard = ({ game, onToggleFavorite, isFavorite }) => {
 
 // Filter tabs component
 const FilterTabs = ({ activeTab, setActiveTab }) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
   const tabs = [
     { id: "all", label: "All Games" },
     { id: "featured", label: "Featured" },
@@ -94,7 +118,9 @@ const FilterTabs = ({ activeTab, setActiveTab }) => {
           className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 whitespace-nowrap ${
             activeTab === tab.id
               ? "bg-indigo-600 text-white"
-              : "bg-zinc-800 text-gray-300 hover:bg-zinc-700"
+              : isDark
+              ? "bg-zinc-800 text-gray-300 hover:bg-zinc-700"
+              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
           }`}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -113,6 +139,8 @@ const Games = () => {
   const [favorites, setFavorites] = useState([]);
   const [recentlyPlayed, setRecentlyPlayed] = useState([]);
   const { account } = useWeb3();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   const category = searchParams.get("category");
 
@@ -190,7 +218,11 @@ const Games = () => {
   const filteredGames = getFilteredGames();
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div
+      className={`container mx-auto px-4 py-8 ${
+        isDark ? "bg-black" : "bg-white"
+      }`}
+    >
       {/* Page header */}
       <motion.div
         className="mb-8"
@@ -198,10 +230,14 @@ const Games = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-3xl font-bold text-white mb-2">
+        <h1
+          className={`text-3xl font-bold ${
+            isDark ? "text-white" : "text-gray-800"
+          } mb-2`}
+        >
           {getCategoryTitle()}
         </h1>
-        <p className="text-gray-400">
+        <p className={isDark ? "text-gray-400" : "text-gray-600"}>
           {category
             ? `Browse our selection of ${getCategoryTitle().toLowerCase()}`
             : "Browse all games available on Penny Wager"}
@@ -241,7 +277,7 @@ const Games = () => {
         </motion.div>
       ) : (
         <div className="text-center py-12">
-          <p className="text-gray-400 text-lg">
+          <p className={isDark ? "text-gray-400" : "text-gray-600"}>
             No games found in this category.
           </p>
         </div>

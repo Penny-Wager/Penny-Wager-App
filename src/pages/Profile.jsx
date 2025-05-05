@@ -8,11 +8,14 @@ import {
   FaDice,
 } from "react-icons/fa";
 import { useWeb3 } from "../context/Web3Context";
+import { useTheme } from "../context/ThemeContext";
 
 export default function Profile() {
   const { account, formattedBalance, connectWallet, disconnectWallet } =
     useWeb3();
   const [activeTab, setActiveTab] = useState("overview");
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   // Mock data for a user profile
   const userStats = {
@@ -61,18 +64,32 @@ export default function Profile() {
 
   if (!account) {
     return (
-      <div className="bg-black text-gray-300 min-h-screen flex items-center justify-center">
+      <div
+        className={`${isDark ? "bg-black" : "bg-gray-50"} ${
+          isDark ? "text-gray-300" : "text-gray-700"
+        } min-h-screen flex items-center justify-center`}
+      >
         <div className="container mx-auto px-4 py-8">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-8 shadow-lg text-center max-w-lg mx-auto">
+          <div
+            className={`${
+              isDark
+                ? "bg-zinc-900 border-zinc-800"
+                : "bg-white border-gray-200"
+            } border rounded-lg p-8 shadow-lg text-center max-w-lg mx-auto`}
+          >
             <div className="mb-6 flex justify-center">
               <div className="h-20 w-20 rounded-full bg-gradient-to-br from-indigo-600 to-indigo-900 flex items-center justify-center text-white">
                 <FaWallet className="text-3xl" />
               </div>
             </div>
-            <h1 className="text-2xl font-bold mb-4 text-white">
+            <h1
+              className={`text-2xl font-bold mb-4 ${
+                isDark ? "text-white" : "text-gray-800"
+              }`}
+            >
               Connect Your Wallet
             </h1>
-            <p className="text-gray-400 mb-8">
+            <p className={`${isDark ? "text-gray-400" : "text-gray-500"} mb-8`}>
               Connect your wallet to view your profile, game history, and stats.
             </p>
             <button
@@ -88,29 +105,57 @@ export default function Profile() {
   }
 
   return (
-    <div className="bg-black text-gray-300 min-h-screen pb-8">
+    <div
+      className={`${isDark ? "bg-black" : "bg-white"} ${
+        isDark ? "text-gray-300" : "text-gray-700"
+      } min-h-screen pb-8`}
+    >
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6 text-white">My Profile</h1>
+        <h1
+          className={`text-3xl font-bold mb-6 ${
+            isDark ? "text-white" : "text-gray-800"
+          }`}
+        >
+          My Profile
+        </h1>
 
         {/* Player info card */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 shadow-lg mb-8">
+        <div
+          className={`${
+            isDark ? "bg-zinc-900 border-zinc-800" : "bg-white border-gray-200"
+          } border rounded-lg p-6 shadow-lg mb-8`}
+        >
           <div className="flex flex-col md:flex-row md:items-center md:justify-between">
             <div className="flex items-center mb-4 md:mb-0">
               <div className="h-16 w-16 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-800 flex items-center justify-center text-white text-2xl font-bold mr-4">
                 {account.slice(2, 4).toUpperCase()}
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white">
+                <h2
+                  className={`text-xl font-bold ${
+                    isDark ? "text-white" : "text-gray-800"
+                  }`}
+                >
                   Player #{account.slice(2, 8)}
                 </h2>
-                <p className="text-gray-400 flex items-center">
+                <p
+                  className={`${
+                    isDark ? "text-gray-400" : "text-gray-500"
+                  } flex items-center`}
+                >
                   <FaWallet className="mr-1" /> {formatAddress(account)}
                 </p>
               </div>
             </div>
 
             <div className="flex flex-col items-start md:items-end">
-              <p className="text-lg font-medium text-gray-400">Balance</p>
+              <p
+                className={`text-lg font-medium ${
+                  isDark ? "text-gray-400" : "text-gray-500"
+                }`}
+              >
+                Balance
+              </p>
               <p className="text-2xl font-bold text-indigo-400">
                 {parseFloat(formattedBalance).toFixed(4)} MONAD
               </p>
@@ -119,14 +164,22 @@ export default function Profile() {
         </div>
 
         {/* Tabs */}
-        <div className="mb-6 border-b border-zinc-800">
+        <div
+          className={`mb-6 border-b ${
+            isDark ? "border-zinc-800" : "border-gray-200"
+          }`}
+        >
           <nav className="flex space-x-4 overflow-x-auto">
             <button
               onClick={() => setActiveTab("overview")}
               className={`py-3 px-4 font-medium text-sm ${
                 activeTab === "overview"
                   ? "bg-indigo-600 text-white rounded-t-lg"
-                  : "text-gray-400 hover:text-white hover:bg-zinc-800 rounded-t-lg"
+                  : `${
+                      isDark
+                        ? "text-gray-400 hover:text-white hover:bg-zinc-800"
+                        : "text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+                    } rounded-t-lg`
               }`}
             >
               Overview
@@ -136,7 +189,11 @@ export default function Profile() {
               className={`py-3 px-4 font-medium text-sm ${
                 activeTab === "history"
                   ? "bg-indigo-600 text-white rounded-t-lg"
-                  : "text-gray-400 hover:text-white hover:bg-zinc-800 rounded-t-lg"
+                  : `${
+                      isDark
+                        ? "text-gray-400 hover:text-white hover:bg-zinc-800"
+                        : "text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+                    } rounded-t-lg`
               }`}
             >
               Game History
@@ -146,7 +203,11 @@ export default function Profile() {
               className={`py-3 px-4 font-medium text-sm ${
                 activeTab === "achievements"
                   ? "bg-indigo-600 text-white rounded-t-lg"
-                  : "text-gray-400 hover:text-white hover:bg-zinc-800 rounded-t-lg"
+                  : `${
+                      isDark
+                        ? "text-gray-400 hover:text-white hover:bg-zinc-800"
+                        : "text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+                    } rounded-t-lg`
               }`}
             >
               Achievements
@@ -156,7 +217,11 @@ export default function Profile() {
               className={`py-3 px-4 font-medium text-sm ${
                 activeTab === "settings"
                   ? "bg-indigo-600 text-white rounded-t-lg"
-                  : "text-gray-400 hover:text-white hover:bg-zinc-800 rounded-t-lg"
+                  : `${
+                      isDark
+                        ? "text-gray-400 hover:text-white hover:bg-zinc-800"
+                        : "text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+                    } rounded-t-lg`
               }`}
             >
               Settings
@@ -170,26 +235,82 @@ export default function Profile() {
             <div>
               {/* Stats cards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 shadow-lg">
-                  <p className="text-gray-400 text-sm mb-1">Games Played</p>
-                  <p className="text-2xl font-bold text-white">
+                <div
+                  className={`${
+                    isDark
+                      ? "bg-zinc-900 border-zinc-800"
+                      : "bg-white border-gray-200"
+                  } border rounded-lg p-4 shadow-lg`}
+                >
+                  <p
+                    className={`${
+                      isDark ? "text-gray-400" : "text-gray-500"
+                    } text-sm mb-1`}
+                  >
+                    Games Played
+                  </p>
+                  <p
+                    className={`text-2xl font-bold ${
+                      isDark ? "text-white" : "text-gray-800"
+                    }`}
+                  >
                     {userStats.gamesPlayed}
                   </p>
                 </div>
-                <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 shadow-lg">
-                  <p className="text-gray-400 text-sm mb-1">Win Rate</p>
+                <div
+                  className={`${
+                    isDark
+                      ? "bg-zinc-900 border-zinc-800"
+                      : "bg-white border-gray-200"
+                  } border rounded-lg p-4 shadow-lg`}
+                >
+                  <p
+                    className={`${
+                      isDark ? "text-gray-400" : "text-gray-500"
+                    } text-sm mb-1`}
+                  >
+                    Win Rate
+                  </p>
                   <p className="text-2xl font-bold text-green-400">
                     {userStats.winRate}
                   </p>
                 </div>
-                <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 shadow-lg">
-                  <p className="text-gray-400 text-sm mb-1">Total Wagered</p>
-                  <p className="text-2xl font-bold text-white">
+                <div
+                  className={`${
+                    isDark
+                      ? "bg-zinc-900 border-zinc-800"
+                      : "bg-white border-gray-200"
+                  } border rounded-lg p-4 shadow-lg`}
+                >
+                  <p
+                    className={`${
+                      isDark ? "text-gray-400" : "text-gray-500"
+                    } text-sm mb-1`}
+                  >
+                    Total Wagered
+                  </p>
+                  <p
+                    className={`text-2xl font-bold ${
+                      isDark ? "text-white" : "text-gray-800"
+                    }`}
+                  >
                     {userStats.totalWagered} MONAD
                   </p>
                 </div>
-                <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 shadow-lg">
-                  <p className="text-gray-400 text-sm mb-1">Profit/Loss</p>
+                <div
+                  className={`${
+                    isDark
+                      ? "bg-zinc-900 border-zinc-800"
+                      : "bg-white border-gray-200"
+                  } border rounded-lg p-4 shadow-lg`}
+                >
+                  <p
+                    className={`${
+                      isDark ? "text-gray-400" : "text-gray-500"
+                    } text-sm mb-1`}
+                  >
+                    Profit/Loss
+                  </p>
                   <p
                     className={`text-2xl font-bold ${
                       userStats.profitLoss >= 0
@@ -204,22 +325,48 @@ export default function Profile() {
               </div>
 
               {/* Recent activity */}
-              <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 shadow-lg">
+              <div
+                className={`${
+                  isDark
+                    ? "bg-zinc-900 border-zinc-800"
+                    : "bg-white border-gray-200"
+                } border rounded-lg p-6 shadow-lg`}
+              >
                 <div className="flex items-center mb-4">
                   <FaHistory className="text-indigo-400 mr-2" />
-                  <h3 className="text-lg font-semibold text-white">
+                  <h3
+                    className={`text-lg font-semibold ${
+                      isDark ? "text-white" : "text-gray-800"
+                    }`}
+                  >
                     Recent Activity
                   </h3>
                 </div>
-                <div className="divide-y divide-zinc-800">
+                <div
+                  className={`divide-y ${
+                    isDark ? "divide-zinc-800" : "divide-gray-200"
+                  }`}
+                >
                   {userStats.recentGames.map((game) => (
                     <div
                       key={game.id}
                       className="py-4 flex items-center justify-between"
                     >
                       <div>
-                        <p className="font-medium text-white">{game.game}</p>
-                        <p className="text-sm text-gray-400">{game.time}</p>
+                        <p
+                          className={`font-medium ${
+                            isDark ? "text-white" : "text-gray-800"
+                          }`}
+                        >
+                          {game.game}
+                        </p>
+                        <p
+                          className={`text-sm ${
+                            isDark ? "text-gray-400" : "text-gray-500"
+                          }`}
+                        >
+                          {game.time}
+                        </p>
                       </div>
                       <div
                         className={`font-bold ${
@@ -236,8 +383,18 @@ export default function Profile() {
                     </div>
                   ))}
                 </div>
-                <div className="mt-6 pt-4 border-t border-zinc-800">
-                  <button className="w-full bg-zinc-800 hover:bg-zinc-700 text-white py-2 rounded-lg transition-colors duration-200">
+                <div
+                  className={`mt-6 pt-4 border-t ${
+                    isDark ? "border-zinc-800" : "border-gray-200"
+                  }`}
+                >
+                  <button
+                    className={`w-full ${
+                      isDark
+                        ? "bg-zinc-800 hover:bg-zinc-700 text-white"
+                        : "bg-gray-100 hover:bg-gray-200 text-gray-800"
+                    }  py-2 rounded-lg transition-colors duration-200`}
+                  >
                     View All Activity
                   </button>
                 </div>
@@ -246,10 +403,20 @@ export default function Profile() {
           )}
 
           {activeTab === "history" && (
-            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 shadow-lg">
+            <div
+              className={`${
+                isDark
+                  ? "bg-zinc-900 border-zinc-800"
+                  : "bg-white border-gray-200"
+              } border rounded-lg p-6 shadow-lg`}
+            >
               <div className="flex items-center mb-4">
                 <FaHistory className="text-indigo-400 mr-2" />
-                <h3 className="text-lg font-semibold text-white">
+                <h3
+                  className={`text-lg font-semibold ${
+                    isDark ? "text-white" : "text-gray-800"
+                  }`}
+                >
                   Game History
                 </h3>
               </div>
@@ -257,7 +424,13 @@ export default function Profile() {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="text-left text-gray-400 border-b border-zinc-800">
+                    <tr
+                      className={`text-left ${
+                        isDark ? "text-gray-400" : "text-gray-500"
+                      } border-b ${
+                        isDark ? "border-zinc-800" : "border-gray-200"
+                      }`}
+                    >
                       <th className="pb-4 pr-6">Game</th>
                       <th className="pb-4 pr-6">Bet</th>
                       <th className="pb-4 pr-6">Result</th>
@@ -270,9 +443,17 @@ export default function Profile() {
                       (game, index) => (
                         <tr
                           key={`${game.id}-${index}`}
-                          className="border-b border-zinc-800"
+                          className={`border-b ${
+                            isDark ? "border-zinc-800" : "border-gray-200"
+                          }`}
                         >
-                          <td className="py-4 pr-6 text-white">{game.game}</td>
+                          <td
+                            className={`py-4 pr-6 ${
+                              isDark ? "text-white" : "text-gray-800"
+                            }`}
+                          >
+                            {game.game}
+                          </td>
                           <td className="py-4 pr-6">{game.bet} MONAD</td>
                           <td
                             className={`py-4 pr-6 ${
@@ -293,7 +474,13 @@ export default function Profile() {
                             {game.result === "Win" ? `+${game.payout}` : "-0"}{" "}
                             MONAD
                           </td>
-                          <td className="py-4 text-gray-400">{game.time}</td>
+                          <td
+                            className={`py-4 ${
+                              isDark ? "text-gray-400" : "text-gray-500"
+                            }`}
+                          >
+                            {game.time}
+                          </td>
                         </tr>
                       )
                     )}
@@ -302,10 +489,22 @@ export default function Profile() {
               </div>
 
               <div className="mt-6 flex justify-between">
-                <button className="bg-zinc-800 hover:bg-zinc-700 text-white py-2 px-4 rounded-lg transition-colors duration-200">
+                <button
+                  className={`${
+                    isDark
+                      ? "bg-zinc-800 hover:bg-zinc-700"
+                      : "bg-gray-100 hover:bg-gray-200"
+                  } ${
+                    isDark ? "text-white" : "text-gray-700"
+                  } py-2 px-4 rounded-lg transition-colors duration-200`}
+                >
                   Previous
                 </button>
-                <div className="flex items-center text-gray-400">
+                <div
+                  className={`flex items-center ${
+                    isDark ? "text-gray-400" : "text-gray-500"
+                  }`}
+                >
                   <span>Page 1 of 8</span>
                 </div>
                 <button className="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg transition-colors duration-200">
@@ -316,80 +515,186 @@ export default function Profile() {
           )}
 
           {activeTab === "achievements" && (
-            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 shadow-lg">
+            <div
+              className={`${
+                isDark
+                  ? "bg-zinc-900 border-zinc-800"
+                  : "bg-white border-gray-200"
+              } border rounded-lg p-6 shadow-lg`}
+            >
               <div className="flex items-center mb-6">
                 <FaTrophy className="text-indigo-400 mr-2" />
-                <h3 className="text-lg font-semibold text-white">
+                <h3
+                  className={`text-lg font-semibold ${
+                    isDark ? "text-white" : "text-gray-800"
+                  }`}
+                >
                   Achievements
                 </h3>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className="border border-indigo-600 bg-zinc-900 bg-opacity-50 rounded-lg p-4 flex items-center">
+                <div
+                  className={`border border-indigo-600 ${
+                    isDark ? "bg-zinc-900" : "bg-gray-50"
+                  } bg-opacity-50 rounded-lg p-4 flex items-center`}
+                >
                   <div className="h-12 w-12 rounded-full bg-indigo-900 flex items-center justify-center mr-4">
                     <FaTrophy className="text-indigo-400" />
                   </div>
                   <div>
-                    <p className="font-medium text-white">First Win</p>
-                    <p className="text-sm text-gray-400">Win your first game</p>
+                    <p
+                      className={`font-medium ${
+                        isDark ? "text-white" : "text-gray-800"
+                      }`}
+                    >
+                      First Win
+                    </p>
+                    <p
+                      className={`text-sm ${
+                        isDark ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    >
+                      Win your first game
+                    </p>
                   </div>
                 </div>
 
-                <div className="border border-zinc-800 bg-zinc-900 bg-opacity-50 rounded-lg p-4 flex items-center">
+                <div
+                  className={`border ${
+                    isDark ? "border-zinc-800" : "border-gray-200"
+                  } ${
+                    isDark ? "bg-zinc-900" : "bg-gray-50"
+                  } bg-opacity-50 rounded-lg p-4 flex items-center`}
+                >
                   <div className="h-12 w-12 rounded-full bg-zinc-800 flex items-center justify-center mr-4 opacity-50">
                     <FaTrophy className="text-gray-400" />
                   </div>
                   <div className="opacity-70">
-                    <p className="font-medium text-white">High Roller</p>
-                    <p className="text-sm text-gray-400">
+                    <p
+                      className={`font-medium ${
+                        isDark ? "text-white" : "text-gray-800"
+                      }`}
+                    >
+                      High Roller
+                    </p>
+                    <p
+                      className={`text-sm ${
+                        isDark ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    >
                       Place a bet of 10+ MONAD
                     </p>
                   </div>
                 </div>
 
-                <div className="border border-zinc-800 bg-zinc-900 bg-opacity-50 rounded-lg p-4 flex items-center">
+                <div
+                  className={`border ${
+                    isDark ? "border-zinc-800" : "border-gray-200"
+                  } ${
+                    isDark ? "bg-zinc-900" : "bg-gray-50"
+                  } bg-opacity-50 rounded-lg p-4 flex items-center`}
+                >
                   <div className="h-12 w-12 rounded-full bg-zinc-800 flex items-center justify-center mr-4 opacity-50">
                     <FaTrophy className="text-gray-400" />
                   </div>
                   <div className="opacity-70">
-                    <p className="font-medium text-white">Lucky Streak</p>
-                    <p className="text-sm text-gray-400">
+                    <p
+                      className={`font-medium ${
+                        isDark ? "text-white" : "text-gray-800"
+                      }`}
+                    >
+                      Lucky Streak
+                    </p>
+                    <p
+                      className={`text-sm ${
+                        isDark ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    >
                       Win 5 games in a row
                     </p>
                   </div>
                 </div>
 
-                <div className="border border-zinc-800 bg-zinc-900 bg-opacity-50 rounded-lg p-4 flex items-center">
+                <div
+                  className={`border ${
+                    isDark ? "border-zinc-800" : "border-gray-200"
+                  } ${
+                    isDark ? "bg-zinc-900" : "bg-gray-50"
+                  } bg-opacity-50 rounded-lg p-4 flex items-center`}
+                >
                   <div className="h-12 w-12 rounded-full bg-zinc-800 flex items-center justify-center mr-4 opacity-50">
                     <FaDice className="text-gray-400" />
                   </div>
                   <div className="opacity-70">
-                    <p className="font-medium text-white">Jackpot</p>
-                    <p className="text-sm text-gray-400">
+                    <p
+                      className={`font-medium ${
+                        isDark ? "text-white" : "text-gray-800"
+                      }`}
+                    >
+                      Jackpot
+                    </p>
+                    <p
+                      className={`text-sm ${
+                        isDark ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    >
                       Win 50+ MONAD in a single game
                     </p>
                   </div>
                 </div>
 
-                <div className="border border-zinc-800 bg-zinc-900 bg-opacity-50 rounded-lg p-4 flex items-center">
+                <div
+                  className={`border ${
+                    isDark ? "border-zinc-800" : "border-gray-200"
+                  } ${
+                    isDark ? "bg-zinc-900" : "bg-gray-50"
+                  } bg-opacity-50 rounded-lg p-4 flex items-center`}
+                >
                   <div className="h-12 w-12 rounded-full bg-zinc-800 flex items-center justify-center mr-4 opacity-50">
                     <FaFire className="text-gray-400" />
                   </div>
                   <div className="opacity-70">
-                    <p className="font-medium text-white">On Fire</p>
-                    <p className="text-sm text-gray-400">
+                    <p
+                      className={`font-medium ${
+                        isDark ? "text-white" : "text-gray-800"
+                      }`}
+                    >
+                      On Fire
+                    </p>
+                    <p
+                      className={`text-sm ${
+                        isDark ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    >
                       Play 10 games in one day
                     </p>
                   </div>
                 </div>
 
-                <div className="border border-zinc-800 bg-zinc-900 bg-opacity-50 rounded-lg p-4 flex items-center">
+                <div
+                  className={`border ${
+                    isDark ? "border-zinc-800" : "border-gray-200"
+                  } ${
+                    isDark ? "bg-zinc-900" : "bg-gray-50"
+                  } bg-opacity-50 rounded-lg p-4 flex items-center`}
+                >
                   <div className="h-12 w-12 rounded-full bg-zinc-800 flex items-center justify-center mr-4 opacity-50">
                     <FaWallet className="text-gray-400" />
                   </div>
                   <div className="opacity-70">
-                    <p className="font-medium text-white">Crypto Whale</p>
-                    <p className="text-sm text-gray-400">
+                    <p
+                      className={`font-medium ${
+                        isDark ? "text-white" : "text-gray-800"
+                      }`}
+                    >
+                      Crypto Whale
+                    </p>
+                    <p
+                      className={`text-sm ${
+                        isDark ? "text-gray-400" : "text-gray-500"
+                      }`}
+                    >
                       Hold 1000+ MONAD in your wallet
                     </p>
                   </div>
@@ -399,20 +704,42 @@ export default function Profile() {
           )}
 
           {activeTab === "settings" && (
-            <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 shadow-lg">
-              <h3 className="text-lg font-semibold mb-6 text-white">
+            <div
+              className={`${
+                isDark
+                  ? "bg-zinc-900 border-zinc-800"
+                  : "bg-white border-gray-200"
+              } border rounded-lg p-6 shadow-lg`}
+            >
+              <h3
+                className={`text-lg font-semibold mb-6 ${
+                  isDark ? "text-white" : "text-gray-800"
+                }`}
+              >
                 Account Settings
               </h3>
 
               <div className="space-y-6">
                 <div>
-                  <h4 className="font-medium mb-2 text-gray-300">
+                  <h4
+                    className={`font-medium mb-2 ${
+                      isDark ? "text-gray-300" : "text-gray-600"
+                    }`}
+                  >
                     Connected Wallet
                   </h4>
-                  <div className="flex items-center justify-between p-4 border border-zinc-800 rounded-lg bg-zinc-800 bg-opacity-50">
+                  <div
+                    className={`flex items-center justify-between p-4 border ${
+                      isDark
+                        ? "border-zinc-800 bg-zinc-800"
+                        : "border-gray-200 bg-gray-100"
+                    } bg-opacity-50 rounded-lg`}
+                  >
                     <div className="flex items-center">
                       <FaWallet className="text-indigo-400 mr-2" />
-                      <span className="text-white">
+                      <span
+                        className={`${isDark ? "text-white" : "text-gray-800"}`}
+                      >
                         {formatAddress(account)}
                       </span>
                     </div>
@@ -426,12 +753,26 @@ export default function Profile() {
                 </div>
 
                 <div>
-                  <h4 className="font-medium mb-2 text-gray-300">
+                  <h4
+                    className={`font-medium mb-2 ${
+                      isDark ? "text-gray-300" : "text-gray-600"
+                    }`}
+                  >
                     Preferences
                   </h4>
-                  <div className="p-4 border border-zinc-800 rounded-lg bg-zinc-800 bg-opacity-50">
+                  <div
+                    className={`p-4 border ${
+                      isDark
+                        ? "border-zinc-800 bg-zinc-800"
+                        : "border-gray-200 bg-gray-100"
+                    } bg-opacity-50 rounded-lg`}
+                  >
                     <div className="flex items-center justify-between mb-4">
-                      <span className="text-white">Sound Effects</span>
+                      <span
+                        className={`${isDark ? "text-white" : "text-gray-800"}`}
+                      >
+                        Sound Effects
+                      </span>
                       <label className="relative inline-flex items-center cursor-pointer">
                         <input
                           type="checkbox"
@@ -442,7 +783,11 @@ export default function Profile() {
                       </label>
                     </div>
                     <div className="flex items-center justify-between mb-4">
-                      <span className="text-white">Notifications</span>
+                      <span
+                        className={`${isDark ? "text-white" : "text-gray-800"}`}
+                      >
+                        Notifications
+                      </span>
                       <label className="relative inline-flex items-center cursor-pointer">
                         <input
                           type="checkbox"
@@ -452,12 +797,16 @@ export default function Profile() {
                       </label>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-white">Dark Mode</span>
+                      <span
+                        className={`${isDark ? "text-white" : "text-gray-800"}`}
+                      >
+                        Dark Mode
+                      </span>
                       <label className="relative inline-flex items-center cursor-pointer">
                         <input
                           type="checkbox"
                           className="sr-only peer"
-                          defaultChecked
+                          defaultChecked={isDark}
                         />
                         <div className="w-11 h-6 bg-zinc-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
                       </label>

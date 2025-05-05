@@ -75,6 +75,7 @@ export const Web3Provider = ({ children }) => {
     if (!isOnMonadChain()) {
       try {
         await switchChain({ chainId: MONAD_CHAIN_ID });
+        return true;
       } catch (error) {
         console.error("Failed to switch chain:", error);
 
@@ -100,12 +101,15 @@ export const Web3Provider = ({ children }) => {
 
             // Try switching again after adding
             await switchChain({ chainId: MONAD_CHAIN_ID });
+            return true;
           } catch (addError) {
             console.error("Failed to add chain:", addError);
+            return false;
           }
         }
       }
     }
+    return true;
   };
 
   // Format address helper

@@ -4,6 +4,7 @@ import { WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import wagmiConfig from "./config/wagmiConfig ";
 import { Web3Provider } from "./context/Web3Context";
+import { ThemeProvider } from "./context/ThemeContext";
 import Layout from "./components/Layout";
 import Homepage from "./pages/Homepage";
 import Profile from "./pages/Profile";
@@ -21,65 +22,67 @@ function App() {
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <Web3Provider>
-          <Router>
-            <Routes>
-              <Route
-                path="/"
-                element={<Layout />}
-              >
+        <ThemeProvider>
+          <Web3Provider>
+            <Router>
+              <Routes>
                 <Route
-                  index
-                  element={<Homepage />}
-                />
-                <Route
-                  path="games"
-                  element={<Games />}
-                />
-                <Route
-                  path="favorites"
-                  element={<Favorites />}
-                />
-                <Route
-                  path="recently-played"
-                  element={<RecentlyPlayed />}
-                />
-                <Route
-                  path="games/coin-flip"
-                  element={<div>Coin Flip Game</div>}
-                />
-                <Route
-                  path="games/dice-roll"
-                  element={<div>Dice Roll Game</div>}
-                />
-                <Route
-                  path="games/lucky-number"
-                  element={<div>Lucky Number Game</div>}
-                />
-                <Route
-                  path="games/card-pick"
-                  element={<div>Card Pick Game</div>}
-                />
-                <Route
-                  path="games/avaitor"
-                  element={<AviatorGame/>}
-                />
-                <Route
-                  path="profile"
-                  element={<Profile />}
-                />
-                <Route
-                  path="transactions"
-                  element={<Transactions />}
-                />
-                <Route
-                  path="*"
-                  element={<NotFound />}
-                />
-              </Route>
-            </Routes>
-          </Router>
-        </Web3Provider>
+                  path="/"
+                  element={<Layout />}
+                >
+                  <Route
+                    index
+                    element={<Homepage />}
+                  />
+                  <Route
+                    path="games"
+                    element={<Games />}
+                  />
+                  <Route
+                    path="favorites"
+                    element={<Favorites />}
+                  />
+                  <Route
+                    path="recently-played"
+                    element={<RecentlyPlayed />}
+                  />
+                  <Route
+                    path="games/coin-flip"
+                    element={<div>Coin Flip Game</div>}
+                  />
+                  <Route
+                    path="games/dice-roll"
+                    element={<div>Dice Roll Game</div>}
+                  />
+                  <Route
+                    path="games/lucky-number"
+                    element={<div>Lucky Number Game</div>}
+                  />
+                  <Route
+                    path="games/card-pick"
+                    element={<div>Card Pick Game</div>}
+                  />
+                  <Route
+                    path="games/avaitor"
+                    element={<div>Avaitor Game</div>}
+                  />
+                  <Route
+                    path="profile"
+                    element={<Profile />}
+                  />
+                  <Route
+                    path="transactions"
+                    element={<Transactions />}
+                  />
+                  <Route
+                    path="*"
+                    element={<NotFound />}
+                  />
+                </Route>
+              </Routes>
+            </Router>
+          </Web3Provider>
+        </ThemeProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );
