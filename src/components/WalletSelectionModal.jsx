@@ -1,7 +1,8 @@
 import React from "react";
 import { useConnect } from "wagmi";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaTimes, FaWallet } from "react-icons/fa";
+import { FaTimes } from "react-icons/fa";
+import { IoWalletOutline } from "react-icons/io5";
 import MetamaskIcon from "../assets/metamask.svg";
 import CoinbaseIcon from "../assets/coinbase.svg";
 import PhantomIcon from "../assets/phantom.svg";
@@ -24,7 +25,7 @@ function WalletSelectionModal({ isOpen, onClose }) {
     } else if (name.includes("backpack")) {
       return BackpackIcon;
     } else {
-      return null; // Will render FaWallet icon as fallback
+      return null; // Will render IoWalletOutline icon as fallback
     }
   };
 
@@ -119,7 +120,7 @@ function WalletSelectionModal({ isOpen, onClose }) {
                                 className="w-6 h-6"
                               />
                             ) : (
-                              <FaWallet className="text-white" />
+                              <IoWalletOutline className="text-white" />
                             )}
                           </div>
                           <span className="font-medium text-white">

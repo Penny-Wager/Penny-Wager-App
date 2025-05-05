@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, NavLink, Link, useLocation } from "react-router-dom";
 import {
-  FaWallet,
   FaUser,
   FaBars,
   FaTimes,
@@ -13,6 +12,7 @@ import {
   FaNetworkWired,
   FaDice,
 } from "react-icons/fa";
+import { IoWalletOutline } from "react-icons/io5";
 import { MdOutlineLightMode, MdOutlineDarkMode } from "react-icons/md";
 import { GiCardRandom } from "react-icons/gi";
 import { IoGameControllerOutline } from "react-icons/io5";
@@ -448,7 +448,7 @@ export default function Layout() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <FaWallet className="mr-2" />
+                <IoWalletOutline className="mr-2" />
                 {isConnecting ? "Connecting..." : "Connect"}
               </motion.button>
             ) : (

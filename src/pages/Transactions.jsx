@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  FaWallet,
   FaExchangeAlt,
   FaFilter,
   FaSearch,
@@ -9,6 +8,7 @@ import {
   FaGamepad,
   FaCoins,
 } from "react-icons/fa";
+import { IoWalletOutline } from "react-icons/io5";
 import { useWeb3 } from "../context/Web3Context";
 import { useTheme } from "../context/ThemeContext";
 import AddressAvatar from "../components/AddressAvatar";
@@ -204,8 +204,8 @@ export default function Transactions() {
             } border rounded-lg p-8 shadow-lg text-center max-w-lg mx-auto`}
           >
             <div className="mb-6 flex justify-center">
-              <div className="h-20 w-20 rounded-full bg-gradient-to-br from-indigo-600 to-indigo-900 flex items-center justify-center text-white">
-                <FaWallet className="text-3xl" />
+              <div className="flex items-center justify-center text-white">
+                <IoWalletOutline className="text-3xl" />
               </div>
             </div>
             <h1
@@ -267,7 +267,7 @@ export default function Transactions() {
                     isDark ? "text-gray-400" : "text-gray-500"
                   } flex items-center`}
                 >
-                  <FaWallet className="mr-1" /> {formatAddress(account)}
+                  <IoWalletOutline className="mr-1" /> {formatAddress(account)}
                 </p>
               </div>
             </div>

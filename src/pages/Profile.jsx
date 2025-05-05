@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import {
-  FaWallet,
   FaHistory,
   FaTrophy,
   FaSignOutAlt,
   FaFire,
   FaDice,
 } from "react-icons/fa";
+import { IoWalletOutline } from "react-icons/io5";
 import { useWeb3 } from "../context/Web3Context";
 import { useTheme } from "../context/ThemeContext";
 
@@ -78,8 +78,8 @@ export default function Profile() {
             } border rounded-lg p-8 shadow-lg text-center max-w-lg mx-auto`}
           >
             <div className="mb-6 flex justify-center">
-              <div className="h-20 w-20 rounded-full bg-gradient-to-br from-indigo-600 to-indigo-900 flex items-center justify-center text-white">
-                <FaWallet className="text-3xl" />
+              <div className=" flex items-center justify-center text-white">
+                <IoWalletOutline className="text-3xl" />
               </div>
             </div>
             <h1
@@ -143,7 +143,7 @@ export default function Profile() {
                     isDark ? "text-gray-400" : "text-gray-500"
                   } flex items-center`}
                 >
-                  <FaWallet className="mr-1" /> {formatAddress(account)}
+                  <IoWalletOutline className="mr-1" /> {formatAddress(account)}
                 </p>
               </div>
             </div>
@@ -680,7 +680,7 @@ export default function Profile() {
                   } bg-opacity-50 rounded-lg p-4 flex items-center`}
                 >
                   <div className="h-12 w-12 rounded-full bg-zinc-800 flex items-center justify-center mr-4 opacity-50">
-                    <FaWallet className="text-gray-400" />
+                    <IoWalletOutline className="text-gray-400" />
                   </div>
                   <div className="opacity-70">
                     <p
@@ -736,7 +736,7 @@ export default function Profile() {
                     } bg-opacity-50 rounded-lg`}
                   >
                     <div className="flex items-center">
-                      <FaWallet className="text-indigo-400 mr-2" />
+                      <IoWalletOutline className="text-indigo-400 mr-2" />
                       <span
                         className={`${isDark ? "text-white" : "text-gray-800"}`}
                       >

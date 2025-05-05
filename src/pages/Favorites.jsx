@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaStar, FaPlay, FaTimes } from "react-icons/fa";
+import { IoWalletOutline } from "react-icons/io5";
 import { useWeb3 } from "../context/Web3Context";
 import { useTheme } from "../context/ThemeContext";
 import { GAMES_DATA } from "../utils/data/games";
@@ -181,7 +182,7 @@ const Favorites = () => {
               : "bg-gray-100 border-gray-200"
           } rounded-lg border`}
         >
-          <FaStar className="text-yellow-400 text-5xl mx-auto mb-4" />
+          <IoWalletOutline className="text-5xl mx-auto mb-4" />
           <h2
             className={`text-xl font-semibold ${
               isDark ? "text-white" : "text-gray-900"

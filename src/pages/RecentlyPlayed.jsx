@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaStar, FaPlay, FaHistory, FaTrash } from "react-icons/fa";
+import { IoWalletOutline } from "react-icons/io5";
 import { useWeb3 } from "../context/Web3Context";
 import { useTheme } from "../context/ThemeContext";
 import { GAMES_DATA } from "../utils/data/games";
@@ -255,7 +256,7 @@ const RecentlyPlayed = () => {
       {/* Content based on wallet connection and history */}
       {!account ? (
         <div className="text-center py-12 bg-zinc-900 rounded-lg border border-zinc-800">
-          <FaHistory className="text-gray-500 text-5xl mx-auto mb-4" />
+          <IoWalletOutline className="text-5xl mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-white mb-2">
             Connect Your Wallet
           </h2>
