@@ -1,4 +1,8 @@
 import CoinFlipImage from "../../assets/game-images/flip-coin.png";
+import AviatorImage from '../../assets/game-images/aviator-plane.webp'
+import CardImage from "../../assets/game-images/cards-lite.webp"
+import DiceImage from "../../assets/game-images/dice-vect.webp"
+import LuckyNumber from '../../assets/game-images/lucky-ball.png'
 
 export const GAMES_DATA = [
   {
@@ -18,7 +22,7 @@ export const GAMES_DATA = [
     name: "Dice Roll",
     description: "Roll the dice and win big",
     category: "casino-games",
-    image: "/game-images/dice-roll.webp",
+    image: DiceImage,
     releaseDate: "2025-03-15",
     featured: false,
     popular: true,
@@ -30,7 +34,7 @@ export const GAMES_DATA = [
     name: "Card Pick",
     description: "Pick a card and test your luck",
     category: "card-games",
-    image: "/game-images/3-card-pick.webp",
+    image: CardImage,
     releaseDate: "2025-09-20",
     featured: true,
     popular: false,
@@ -42,7 +46,7 @@ export const GAMES_DATA = [
     name: "Lucky Number",
     description: "Pick your lucky number and win",
     category: "casino-games",
-    image: "/game-images/lucky-number.jpg",
+    image: LuckyNumber,
     releaseDate: "2025-05-10",
     featured: false,
     popular: true,
@@ -50,11 +54,11 @@ export const GAMES_DATA = [
     maxBet: 10,
   },
   {
-    id: "avaitor",
-    name: "Avaitor",
+    id: "aviator",
+    name: "Aviator",
     description: "Cash out before the plane flies away",
     category: "casino-games",
-    image: "/game-images/aviator.webp",
+    image: AviatorImage,
     releaseDate: "2025-06-01",
     featured: true,
     popular: true,

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   FaFire,
   FaChevronLeft,
@@ -7,7 +8,6 @@ import {
   FaStar,
   FaFilter,
 } from "react-icons/fa";
-import CoinFlipImage from "../assets/game-images/flip-coin.png";
 import { GAMES_DATA } from "../utils/data/games";
 import { useTheme } from "../context/ThemeContext";
 
@@ -83,31 +83,31 @@ export default function Homepage() {
             {featuredGames.map((game) => (
               <div
                 key={game.id}
-                className="group transform transition-all duration-300 hover:-translate-y-2"
+                className="transform transition-all duration-300 hover:-translate-y-2"
               >
-                <div className="bg-gradient-to-br from-indigo-900 to-zinc-900 border border-indigo-700 rounded-xl overflow-hidden shadow-2xl relative">
+                <div className="bg-gradient-to-br from-indigo-900 to-zinc-900 border border-indigo-700 rounded-xl overflow-hidden shadow-2xl relative h-full">
                   <div className="absolute top-2 left-2 bg-yellow-500 text-black font-bold px-2 py-1 rounded-md text-xs z-10">
                     FEATURED
                   </div>
                   <img
                     src={game.image}
                     alt={game.name}
-                    className="w-full h-40 sm:h-48 md:h-56 object-cover"
+                    className="w-full h-40 sm:h-48 md:h-56 object-cover p-1 md:p-2"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
                   <div className="p-3 md:p-4 relative z-10">
                     <h3 className="font-bold text-base md:text-lg text-white mb-1">
                       {game.name}
                     </h3>
-                    <p className="text-gray-300 text-xs md:text-sm mb-3 md:mb-4">
+                    <p className="text-gray-300 text-xs md:text-sm mb-3 md:mb-4 min-h-[2.5rem]">
                       {game.description}
                     </p>
-                    <button
+                    <Link
                       className="bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white font-semibold py-1.5 md:py-2 px-4 md:px-8 rounded-lg w-full transform transition-transform duration-300"
-                      onClick={() => navigate(`/games/${game.id}`)}
-                    >
+                     to={`/games/${game.id}`}
+                     >
                       PLAY NOW
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -156,21 +156,21 @@ export default function Homepage() {
                 key={game.id}
                 className="group transform transition-all duration-300 hover:-translate-y-2"
               >
-                <div className="bg-gradient-to-br from-red-900 to-zinc-900 border border-red-700 rounded-xl overflow-hidden shadow-2xl relative">
+                <div className="bg-gradient-to-br from-red-900 to-zinc-900 border border-red-700 rounded-xl overflow-hidden shadow-2xl relative h-full">
                   <div className="absolute top-2 left-2 bg-red-500 text-white font-bold px-2 py-1 rounded-md text-xs z-10">
                     POPULAR
                   </div>
                   <img
                     src={game.image}
                     alt={game.name}
-                    className="w-full h-40 sm:h-48 md:h-56 object-cover"
+                    className="w-full h-40 sm:h-48 md:h-56 object-cover p-1 md:p-2"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
                   <div className="p-3 md:p-4 relative z-10">
                     <h3 className="font-bold text-base md:text-lg text-white mb-1">
                       {game.name}
                     </h3>
-                    <p className="text-gray-300 text-xs md:text-sm mb-3 md:mb-4">
+                    <p className="text-gray-300 text-xs md:text-sm mb-3 md:mb-4 min-h-[2.5rem]">
                       {game.description}
                     </p>
                     <button
@@ -258,7 +258,7 @@ export default function Homepage() {
                   ? "Casino Games"
                   : activeTab === "card-games"
                   ? "Card Casino"
-                  : "Game"}
+                  : "Slot Games"}
               </h2>
             </div>
           </div>
