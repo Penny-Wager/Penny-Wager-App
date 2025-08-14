@@ -1,5 +1,28 @@
 @import "tailwindcss";
 
+*{
+  box-sizing: border-box;
+}
 body {
   font-family: "DM Sans", sans-serif;
+}
+
+option{
+  color: black
+}
+
+label{
+  display: block;
+  padding: 0.25rem;
+  margin: 0.25rem 0;
+}
+
+select{
+  border: 0;
+  outline: none;
+  padding: 0.125rem;
+
+}
+select:hover, select:focus{
+  border: 2px solid rgba(5, 14, 92, 0.5)
 }
