@@ -16,3 +16,9 @@ label{
   margin: 0.25rem 0;
   font-weight: 500;
 }
+
+.chosen{
+  color: white;
+  text-decoration: underline;
+  font-weight: bold;
+}
