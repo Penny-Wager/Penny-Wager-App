@@ -97,7 +97,7 @@ export default function CardPickGame(){
 
     return(
         <div className="grid md:grid-cols-2 m-2 p-1 md:p-2 md:gap-x-2 border-zinc-600 border-1 rounded-2xl">
-            <div className="p-2 md:p-4 bg-zinc-800 rounded-2xl">
+            <div className="p-2 md:p-4 bg-zinc-800 rounded-2xl my-2 md:my-0">
             <p className="text-2xl font-bold">Pick A Card!</p>
             <p><u>Attempts Remaining:</u> {3 - attempts}</p>
             <div className="grid md:grid-cols-2 gap-x-2 md:gap-x-4">
@@ -158,7 +158,7 @@ export default function CardPickGame(){
                 </label> 
 
                 <p>Multiplier: </p>
-                <div className="grid grid-cols-4 gap-x-2">
+                <div className="grid grid-cols-4 gap-2">
 
                 <button onClick={()=>{updateMultiplier(1.25)}} className={`rounded-[1.25rem] ${betMultiplier == 1.25? "chosen" : ''} bg-green-400 text-green-200 hover:text-white`}>x1.25</button>
                 <button onClick={()=>updateMultiplier(2.43)} className={`rounded-[1.25rem] ${betMultiplier == 2.43? "chosen" : ''} bg-amber-500 text-amber-300 hover:text-white`}>x2.43</button>
@@ -174,7 +174,9 @@ export default function CardPickGame(){
                 <div className={`card_preview my-2 place-self-center md:my-4 p-2 md:p-4 bg-white h-[7.5rem] w-[5rem] rounded-xl text-black ${selectedValue.length == 0 ? "opacity-75": ''} transition-all`} >
                     <div className="grid relative h-full">
                     <p className="font-bold">{selectedValue}</p> 
+                    <div className="place-self-center">
                     <CardIcon suit={selectedSuit} />
+                    </div>
                     <p className="self-bottom m-0 rotate-180 font-bold">{selectedValue}</p>                  
                     </div>
                 </div> 
@@ -188,7 +190,8 @@ export default function CardPickGame(){
                     Confirm
                 </button>
             </div>
-            <div className="grid place-items-center h-[7.5rem] md:h-auto border-t-2 md:border-t-0 md:border-l-2 border-zinc-800">
+
+            <div className="grid place-items-center p-1 md:p-2 min-h-[7.5rem] md:h-auto border-t-2 md:border-t-0 md:border-l-2 border-zinc-800">
                {
                 isShuffling ? <p>Shuffling!</p> : <p>{
                     shouldStartShuffle && selectedSuit.length >1 && selectedValue.length >= 1 ? <GameComp/>: 'Awaiting card choice'
