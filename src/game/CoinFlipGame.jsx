@@ -77,8 +77,6 @@ function CoinComponent(){
     )
 }
 
-
-
     return(
         <div className="grid md:grid-cols-2 my-1 md:my-2 gap-2 bg-zinc-700 border-zinc-800 p-1 md:p-2 border-2">
             <div className="grid">
@@ -89,7 +87,7 @@ function CoinComponent(){
                 onChange={(e)=> makeGuess(e.target.value)
                 }
                 disabled={isGamePlayed || attempts > 5}
-                name="coinFlip" id="flip" className="w-3/4 border-zinc-600 rounded-md border-2 p-1 md:p-2 ml-1">
+                name="coinFlip" id="flip" className="w-3/4 border-zinc-600 rounded-md border-2 p-1 md:p-2 ml-1 outline-none">
                     <option value={"Heads"} >Heads</option>
                     <option value={"Tails"}>Tails</option>
                 </select>
@@ -106,6 +104,7 @@ function CoinComponent(){
                   min={0.01}
                   max={2.0}
                   defaultValue={0.10}
+                  onChange={(e)=> changeBetAmount(e.target.value)}
                 />
                 <p>MON</p>
                 </div>
