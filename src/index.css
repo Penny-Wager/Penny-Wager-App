@@ -1,5 +1,43 @@
 @import "tailwindcss";
 
+*{
+  box-sizing: border-box;
+}
 body {
   font-family: "DM Sans", sans-serif;
+}
+
+option{
+  color: black
+}
+
+label{
+  padding: 0.25rem;
+  margin: 0.25rem 0;
+  font-weight: 500;
+}
+
+.chosen{
+  color: white;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+@keyframes coinFlipAnim{
+  0% {
+    transform: rotateX(0);
+  }
+  100%{
+    transform: rotateX(2160deg);
+  }
+}
+
+@keyframes showSlowly{
+  0%{opacity: 0}
+  100%{opacity: 0.75}
+}
+.coinShow{animation: showSlowly 3s}
+
+.animate{
+  animation: coinFlipAnim 3s forwards;
 }

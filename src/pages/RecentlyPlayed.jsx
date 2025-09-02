@@ -16,11 +16,11 @@ const MOCK_RECENT_DATA = [
     winnings: 0.3,
   },
   {
-    gameId: "card-game",
+    gameId: "card-pick",
     lastPlayed: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
     timesPlayed: 2,
     lastBet: 1,
-    winnings: -1,
+    winnings: 1,
   },
   {
     gameId: "dice-roll",
@@ -71,7 +71,8 @@ const RecentGameCard = ({ game, recentData, onToggleFavorite, isFavorite }) => {
       <div className="relative h-48 overflow-hidden bg-gradient-to-br from-indigo-900 to-purple-800">
         {/* Placeholder for game image */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-3xl">{game.name.charAt(0)}</span>
+          <img src = {game.image}   alt={game.name}
+                    className="w-full h-40 sm:h-48 md:h-56 object-cover p-1 md:p-2" />
         </div>
 
         {/* Favorite button */}
@@ -175,10 +176,6 @@ const RecentlyPlayed = () => {
   // Load recent games and favorites on mount
   useEffect(() => {
     if (account) {
-      // In a real app, this would be loaded from localStorage or API
-      // For demo, we'll use the mock data
-
-      // Fetch game details for each recent game
       const gamesWithDetails = MOCK_RECENT_DATA.map((recentData) => {
         const gameDetails = GAMES_DATA.find(
           (game) => game.id === recentData.gameId
