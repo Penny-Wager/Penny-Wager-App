@@ -7,9 +7,9 @@ import { GiDiamonds } from "react-icons/gi";
 
 export default function CardPickGame(){
     const [isShuffling, setShuffleStatus] = useState(false)
-    const [betValue, updateBet] = useState(0.1)
-    const [betMultiplier, updateMultiplier] = useState(1.0)
     const [attempts, addAttempt] = useState(0)
+    const [betMultiplier, updateMultiplier] = useState(1.0)
+    const [betValue, updateBet] = useState(0.1)
     const [selectedValue, selectNewValue] = useState('')
     const [selectedSuit, selectNewSuit] = useState('')
     const [shouldStartShuffle, setShuff] = useState(false) // State should only be true when game start conditions are met
@@ -53,10 +53,61 @@ export default function CardPickGame(){
             }
         }
 
-// Primary form filled before gameplay begins
-    function GameInputs(){
+    //Renders Actual Lucky Card, Processes Rewards
+    function GameComp(){
+        const {suit, value} =  luckyChoose()
+      
         return(
-            <div className="p-2 md:p-4 bg-zinc-800 rounded-2xl my-2 md:my-0">
+            <div className="grid p-2 md:p-4 min-h-[75vh] md:min-h-auto">
+                <p>
+                Actual Lucky Card is: {`${value} of ${suit}`}
+                </p>
+                   <div className="grid">
+                <div className="card_preview my-2 place-self-center md:my-4 p-2 md:p-4 bg-white h-[10rem] w-[7.5rem] md:h-[12.5rem] md:w-[10rem] rounded-xl text-black" >
+                    <div className="grid relative h-full">
+                    <p className="font-bold">{value}</p>
+                    <div className="place-self-center transition-all">
+                    <CardIcon suit={suit} />  
+                    </div>
+                    <p className="self-bottom m-0 rotate-180 font-bold">{value}</p>                  
+                    </div>
+                </div> 
+                </div>   
+
+                <div className="game_review">
+                    <p>Guessed Correct Suit: {selectedSuit == suit ? "Yes" : "No"}</p>
+                    <p>Guessed Correct Value: {selectedValue == value ? "Yes" : "No"}</p>
+
+                </div>
+
+                <div className="flex gap-x-4 w-full md:my-2">
+                <button className="rounded-2xl text-white bg-zinc-600 p-2 w-1/2">
+                    Accept Winnings: +0.45MON
+                </button>
+                <button className="rounded-2xl text-white bg-indigo-700 w-1/2 p-2" onClick={()=> {
+                    setShuff(false);
+                    addAttempt((attempt) => attempt + 1);
+                    selectNewSuit('');
+                    selectNewValue('');
+                    }}>Play Again</button>
+            </div>
+            </div>
+        )
+    }
+
+    return(
+        <div className="grid m-2 md:gap-x-2 s md:border-zinc-600 md:border-1 rounded-2xl">
+          { 
+          <>
+            {isShuffling?
+            <div className="min-h-[85vh] md:min-h-auto p-2 md:p-4">
+            <p>Shuffling!</p>
+            </div> : <>{
+            shouldStartShuffle && selectedSuit.length > 1 && selectedValue.length >= 1 ? 
+            <div className="grid items-center">
+            <GameComp/>
+            </div> :        
+             <div className="p-2 md:p-4 bg-zinc-800 rounded-2xl my-2 md:my-0">
             <p className="text-2xl font-bold">Pick A Card!</p>
             <p><u>Attempts Remaining:</u> {3 - attempts}</p>
             <div className="grid md:grid-cols-5 gap-x-2 md:gap-x-4">
@@ -109,8 +160,13 @@ export default function CardPickGame(){
                 <label htmlFor="amnt" className="font-bold">
                     Bet Amount:
                 <div className="flex gap-x-2 border-2 border-zinc-600 rounded-xl">
-                <input type="number" name="betAmount" id="amnt" step={0.01} min={0.10} max={5.0} className="block indent-3  w-[75%] outline-0" defaultValue={0.1} onChange={(e) => updateBet(e.target.value)}
-                disabled={shouldStartShuffle}
+                <input type="number"
+                 name="betAmount" 
+                 id="amnt" 
+                 step={0.01} min={0.10} 
+                 max={5.0} 
+                 defaultValue={0.1}
+                 className="block indent-3  w-[75%] outline-0" disabled={shouldStartShuffle} onChange={(e)=> updateBet(e.target.value) }
                 />
                 <span className="border-l-2 border-zinc-600 p-1 md:p-2">MON</span>
                 </div>
@@ -133,7 +189,7 @@ export default function CardPickGame(){
                 <div className={`card_preview my-2 place-self-center md:my-4 p-2 md:p-4 bg-white h-[10rem] w-[7.5rem] rounded-xl text-black ${selectedValue.length == 0 ? "opacity-75": ''} transition-all`} >
                     <div className="grid relative h-full">
                     <p className="font-bold">{selectedValue}</p> 
-                    <div className="place-self-center">
+                    <div className="place-self-center transition-all">
                     <CardIcon suit={selectedSuit} />
                     </div>
                     <p className="self-bottom m-0 rotate-180 font-bold">{selectedValue}</p>                  
@@ -144,66 +200,12 @@ export default function CardPickGame(){
 
                  <button className="bg-indigo-600 opacity-100 w-full rounded-2xl p-1 md:w-3/4 md:p-2 disabled:bg-zinc-400 disabled:opacity-75 transition-all my-2 md:my-1 grid justify-self-center" 
                 onClick={simShuffle}
-                disabled={selectedValue.length <10 && selectedSuit.length <2 && betValue < 0.5 || shouldStartShuffle || attempts == 3}              
+                disabled={selectedValue.length <10 && selectedSuit.length <2 || shouldStartShuffle || attempts == 3}              
                 title={betValue}
                 >
                     Confirm
                 </button>
-            </div>
-        )
-    }
-
-    //Right-Hand Side Component
-    function GameComp(){
-        const {suit, value} =  luckyChoose()
-      
-        return(
-            <div className="grid">
-                <p>
-                Actual Lucky Card is: {`${value} of ${suit}`}
-                </p>
-                   <div className="grid">
-                <div className="card_preview my-2 place-self-center md:my-4 p-2 md:p-4 bg-white h-[7.5rem] w-[5rem] rounded-xl text-black" >
-                    <div className="grid relative h-full">
-                    <p className="font-bold">{value}</p>
-                    <div className="place-self-center">
-                    <CardIcon suit={suit} />  
-                    </div>
-                    <p className="self-bottom m-0 rotate-180 font-bold">{value}</p>                  
-                    </div>
-                </div> 
-                </div>   
-
-                <div className="game_review">
-                    <p>Guessed Correct Suit: {selectedSuit == suit ? "Yes" : "No"}</p>
-                    <p>Guessed Correct Value: {selectedValue == value ? "Yes" : "No"}</p>
-
-                </div>
-
-                <div className="flex gap-x-4">
-                <button className="rounded-xl text-white bg-zinc-600 p-2">
-                    Accept Winnings: +0.45MON
-                </button>
-                <button className="rounded-xl text-white bg-indigo-700 p-2" onClick={()=> {
-                    setShuff(false);
-                    addAttempt((attempt) => attempt + 1);
-                    selectNewSuit('');
-                    selectNewValue('');
-                    }}>Play Again</button>
-            </div>
-            </div>
-        )
-    }
-
-    return(
-        <div className="grid m-2 md:gap-x-2 s md:border-zinc-600 md:border-1 rounded-2xl drop-shadow-md drop-shadow-zinc-600 md:drop-shadow-[0]">
-          { 
-          <>
-            {isShuffling? <p>Shuffling!</p> : <>{
-            shouldStartShuffle && selectedSuit.length > 1 && selectedValue.length >= 1 ? 
-            <div className="md:hidden grid">
-            <GameComp/>
-            </div> : <GameInputs/>   
+            </div>  
 }</>
 }
 </>
