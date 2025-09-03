@@ -35,7 +35,7 @@ function checker(){
 
 function CoinComponent(){
     return(
-        <div className="grid place-items-center my-2">   
+        <div className="grid place-items-center my-2 min-h-[50vh]">   
             <div className={`w-25 h-25 animate rounded-full bg-gradient-to-br from-amber-300 to-amber-700 perspective-[300px] transform-3d place-items-center grid shadow-black shadow-2xl border-4 border-amber-800 ${isFlipping ? "animate" : 'hidden'}`}>
                 {
         coinState ? <FaCrown size={40} className="coinShow"/> : <FaAnchor size={40} className="coinShow"/>
