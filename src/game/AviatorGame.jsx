@@ -6,7 +6,7 @@ import {
   useWriteContract,
   useWaitForTransactionReceipt,
 } from "wagmi";
-import { FaHistory, FaInfoCircle, FaCheck, FaPlane } from "react-icons/fa";
+import { FaCheck, FaPlane } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
 // ABI of your Aviator smart contract
