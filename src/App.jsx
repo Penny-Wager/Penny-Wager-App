@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -13,9 +12,7 @@ import Transactions from "./pages/Transactions";
 import Favorites from "./pages/Favorites";
 import Games from "./pages/Games";
 import RecentlyPlayed from "./pages/RecentlyPlayed";
-import AviatorGame from "./game/AviatorGame";
-import CardPickGame from "./game/CardPickGame";
-import CoinFlipGame from "./game/CoinFlipGame";
+import { GAMES } from "./config/games";
 
 // Create a client for React Query
 const queryClient = new QueryClient();
@@ -48,26 +45,15 @@ function App() {
                     path="recently-played"
                     element={<RecentlyPlayed />}
                   />
-                  <Route
-                    path="games/coin-flip"
-                    element={<CoinFlipGame />}
-                  />
-                  <Route
-                    path="games/dice-roll"
-                    element={<div>Dice Roll Game</div>}
-                  />
-                  <Route
-                    path="games/lucky-number"
-                    element={<div>Lucky Number Game</div>}
-                  />
-                  <Route
-                    path="games/card-pick"
-                    element={<CardPickGame/>}
-                  />
-                  <Route
-                    path="games/aviator"
-                    element={<AviatorGame/>}
-                  />
+
+                  {GAMES.map((game) => (
+                    <Route
+                      key={game.id}
+                      path={`games/${game.path}`}
+                      element={game.element}
+                    />
+                  ))}
+
                   <Route
                     path="profile"
                     element={<Profile />}
