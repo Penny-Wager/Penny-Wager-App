@@ -1,3 +1,4 @@
+import React from "react";
 import AviatorGame from "../game/AviatorGame";
 import CardPickGame from "../game/CardPickGame";
 import CoinFlipGame from "../game/CoinFlipGame";

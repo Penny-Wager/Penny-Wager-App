@@ -305,7 +305,7 @@ export default function Layout() {
         }`}
       >
         <div className="text-center text-xs text-gray-500">
-          <p>© 2025 Penny Wager</p>
+          <p>© {new Date().getFullYear()} Penny Wager</p>
         </div>
       </div>
     </div>
