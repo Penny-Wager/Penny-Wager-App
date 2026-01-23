@@ -1,12 +1,24 @@
-# React + Vite
+# Penny-Wager
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Penny-Wager is a cutting-edge, wager-based gaming destination built for the modern web. Experience the thrill of fast-paced, high-stakes mini-games with instant interactions and a premium aesthetic.
 
-Currently, two official plugins are available:
+## 🚀 The Experience
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Penny-Wager combines the simplicity of classic games of chance with the power of Web3 technology. Whether you're feeling lucky with a coin toss or chasing high multipliers in the sky, our platform delivers:
 
-## Expanding the ESLint configuration
+*   **Diverse Game Suite**: Choose from a growing collection of mini-games, from tactical card picks to heart-pounding crash games.
+*   **Web3 Powered**: Seamlessly connect your wallet to participate in the action. Powered by the high-performance Monad ecosystem.
+*   **Premium Visuals**: A dark-mode first design featuring smooth animations, glassmorphism, and a responsive interface that feels alive.
+*   **Instant Result transparency**: Every wager is tracked and visible, ensuring a fair and transparent gaming environment.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🎮 Featured Games
+
+*   **✈️ Aviator**: Our flagship crash game. Watch the multiplier climb and cash out before the plane flies away. How high will you go?
+*   **🪙 Coin Flip**: The ultimate 50/50. Simple, fast, and iconic.
+*   **🎲 Dice Roll**: Predict the outcome and roll for glory in this classic game of odds.
+*   **🃏 Card Pick**: test your intuition. Select the right cards to unlock potential rewards.
+*   **🎯 Lucky Number**: Find your fortune by predicting the winning sequence.
+
+## 💎 Why Penny-Wager?
+
+Designed for users who value speed and style, Penny-Wager provides a "no-fluff" gaming experience. It's about quick rounds, clear stakes, and immediate gratification in a sleek, modern wrapper.
